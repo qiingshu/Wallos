@@ -4,6 +4,7 @@
  const update=()=>{
   const height=viewport?viewport.height:window.innerHeight;
   document.documentElement.style.setProperty('--viewport-height',`${height}px`);
+  document.documentElement.style.setProperty('--viewport-top',`${viewport?.offsetTop||0}px`);
   const editing=/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName||'');
   document.body.classList.toggle('keyboard-open',editing && window.innerHeight-height>120);
  };

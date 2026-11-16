@@ -35,7 +35,7 @@ button,input[type=submit]{border-radius:10px;min-height:40px}
  #currencies input[name=code]{grid-column:1/3;grid-row:2;width:100%}
  #currencies button{grid-row:2}
  .form-group-inline{flex-wrap:wrap;gap:10px}.form-group-inline>input,.form-group-inline>select{flex:1 1 120px}
- .form-group-inline>label{flex:0 0 100%}
+ .form-group-inline>label:not(.logo-preview){flex:0 0 100%}
  .mobile-nav{padding-bottom:env(safe-area-inset-bottom,0px)!important;min-height:60px;box-sizing:content-box;background:var(--box-background-color)!important;border-top:1px solid var(--box-border-color);z-index:20}
  .mobile-navigation main{margin-bottom:0;padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))}
  .mobile-nav .nav-link{font-size:11px;min-height:48px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}
@@ -46,10 +46,20 @@ button,input[type=submit]{border-radius:10px;min-height:40px}
  .toast{max-width:calc(100vw - 24px);box-sizing:border-box}
 }
 /* Let long Chinese checkbox labels wrap inside narrow settings cards. */
-.form-group-inline>label{width:auto!important;max-width:100%;min-width:0;flex:1 1 0;flex-shrink:1!important;overflow-wrap:anywhere}
+.form-group-inline>label:not(.logo-preview){width:auto!important;max-width:100%;min-width:0;flex:1 1 0;flex-shrink:1!important;overflow-wrap:anywhere}
 .form-group-inline>input[type=checkbox],.form-group-inline>input[type=radio]{flex:0 0 auto}
 .toast:not(.active){display:none}
 .toast.active{display:block}
 @media(max-width:768px){.account-section .form-group-inline{max-width:100%}.account-section .form-group-inline>div{min-width:0}.account-section input[type=checkbox]+label{width:auto!important;min-width:0;flex:1 1 0}}
 
 .empty-page>img{max-width:200px;width:55%;height:auto}.empty-page{padding-top:18px}
+@media(max-width:768px){
+ .subscription-form,.subscription-modal{width:calc(100% - 24px)!important;top:calc(var(--viewport-top,0px) + 12px)!important;transform:translateX(-50%)!important;max-height:calc(var(--viewport-height,100dvh) - 24px)!important;padding:18px 16px calc(20px + env(safe-area-inset-bottom,0px));z-index:30;overscroll-behavior:contain}
+ .subscription-form .form-group-inline{gap:8px}.subscription-form input,.subscription-form select{min-width:0}
+}
+@media(max-width:430px){
+ #subs-form>.form-group:has(#auto-renew-group)>.inline{flex-wrap:wrap}
+ #subs-form .split66:has(#cycle),#auto-renew-group{width:100%!important;flex-basis:100%}
+ #auto-renew-group>.inline{justify-content:flex-start;gap:10px;height:44px}
+ #auto-renew-group label[for=auto_renew]{white-space:nowrap;width:auto}
+}
