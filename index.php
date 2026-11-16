@@ -151,7 +151,11 @@ while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
             <?php
         }
     ?>
-    <h1><?= translate('hello', $i18n) ?> <?= htmlspecialchars($first_name) ?></h1>
+    <h1>订阅管理</h1>
+    <div class="personal-summary" aria-label="费用概览">
+      <article><span>月度费用</span><h2><?= CurrencyFormatter::format($totalCostPerMonth ?? 0, $currencies[$userData['main_currency']]['code']) ?></h2></article>
+      <article><span>年度费用</span><h2><?= CurrencyFormatter::format($totalCostPerYear ?? 0, $currencies[$userData['main_currency']]['code']) ?></h2></article>
+    </div>
 
     <?php
     // If there are overdue subscriptions, display them

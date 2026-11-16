@@ -1,0 +1,47 @@
+/* Shared with the live cx.imqing.cc toolkit: green, warm paper, system CJK. */
+:root{--main-color:#28674e!important;--main-color-rgb:40,103,78!important;--accent-color:#e9f1e9!important;--accent-color-rgb:233,241,233!important;--hover-color:#204e3d!important;--box-border-color:#e0e7df;--background-color:#f4f6f3;--text-color:#243e35;--box-shadow:0 8px 26px #25422c06;--personal-font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+body,input,button,select,textarea{font-family:var(--personal-font)!important;line-height:1.6}
+body{background:var(--background-color);color:var(--text-color)}
+body.dark{--background-color:#16231e;--box-background-color:#20312a;--header-background-color:#20312a;--box-border-color:#385046;--text-color:#e2ece5}
+body>header{background:var(--header-background-color);border-bottom:1px solid var(--box-border-color);box-shadow:none;padding:0}
+body>header>.contain{min-height:72px;padding-top:12px;padding-bottom:12px}
+header .logo a{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-color)}
+header .logo .logo-image,header .logo .logo-image svg{width:40px;height:32px;max-width:40px}
+.brand-title{font-size:19px;font-weight:650;letter-spacing:.02em}.brand-title small{display:block;font-size:10px;font-weight:400;color:#687d72;letter-spacing:.1em}
+main>.contain{padding-top:24px}h1{font-size:26px;line-height:1.4;letter-spacing:.02em}h2{font-size:20px;line-height:1.5}
+.account-section,.dashboard-subscriptions-container,.subscription,.personal-summary>article{border-radius:18px;box-shadow:var(--box-shadow);border-color:var(--box-border-color)}
+input,select,textarea{min-width:0;box-sizing:border-box;max-width:100%;font-size:16px!important;border-radius:10px!important}
+input:not([type=checkbox]):not([type=radio]):not([type=color]),select{min-height:44px}
+button,input[type=submit]{border-radius:10px;min-height:40px}
+.settings-notes,.settings-notes p,.form-group label{white-space:normal;word-break:normal;overflow-wrap:anywhere;line-height:1.75}
+.form-group,.form-group-inline,.account-section,.settings-container{min-width:0}
+.personal-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0 22px}
+.personal-summary>article{padding:20px;background:var(--box-background-color);border:1px solid var(--box-border-color)}
+.personal-summary p{margin:0 0 6px;color:#687d72;font-size:13px}.personal-summary strong{font-size:27px;font-weight:650;color:var(--main-color);overflow-wrap:anywhere}
+.exchange-status{padding:12px 16px;background:#e9f1e9;border-radius:10px;color:#28674e}.exchange-error{color:#9b332b;background:#fff0eb}
+.personal-footer{text-align:center;color:#687d72;font-size:11px;margin:24px 16px 16px;line-height:1.8}.personal-footer a{color:inherit}
+#currencies .form-group-inline{display:grid;grid-template-columns:64px minmax(160px,1fr) minmax(90px,140px) 44px 44px;gap:10px}
+#currencies input{width:100%!important;text-overflow:clip;min-width:0}
+@media(max-width:768px){
+ .contain{width:100%;padding-left:20px;padding-right:20px;box-sizing:border-box}
+ body>header>.contain{min-height:62px;padding-top:8px;padding-bottom:8px}
+ header .logo .logo-image,header .logo .logo-image svg{width:32px;height:26px}
+ .brand-title{font-size:17px}.brand-title small{font-size:9px}
+ main>.contain{padding-top:18px}h1{font-size:24px;margin-top:0}
+ .personal-summary{gap:10px}.personal-summary>article{padding:16px 12px}.personal-summary strong{font-size:23px}
+ .account-section{padding:18px 16px!important}.account-section header{padding:0 0 12px}
+ #currencies .form-group-inline{grid-template-columns:54px minmax(0,1fr) 44px 44px;gap:8px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--box-border-color)}
+ #currencies input[name=currency]{grid-column:2/5;grid-row:1}
+ #currencies input[name=code]{grid-column:1/3;grid-row:2;width:100%}
+ #currencies button{grid-row:2}
+ .form-group-inline{flex-wrap:wrap;gap:10px}.form-group-inline>input,.form-group-inline>select{flex:1 1 120px}
+ .form-group-inline>label{flex:0 0 100%}
+ .mobile-nav{padding-bottom:env(safe-area-inset-bottom,0px)!important;min-height:60px;box-sizing:content-box;background:var(--box-background-color)!important;border-top:1px solid var(--box-border-color);z-index:20}
+ .mobile-navigation main{margin-bottom:0;padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+ .mobile-nav .nav-link{font-size:11px;min-height:48px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}
+ .keyboard-open .mobile-nav{display:none!important}
+ .subscription-main,.subscription-details,.modal,.logo-search,.icon-search{max-height:calc(var(--viewport-height,100dvh) - 28px)!important;overflow-y:auto!important;overscroll-behavior:contain}
+ body.no-scroll .mobile-nav{visibility:hidden}
+ .subscription-main{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important}
+ .toast{max-width:calc(100vw - 24px);box-sizing:border-box}
+}

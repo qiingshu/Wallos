@@ -279,7 +279,7 @@ if (isset($_POST['username'])) {
 }
 ?>
 <!DOCTYPE html>
-<html dir="<?= $languages[$lang]['dir'] ?>">
+<html lang="zh-CN" dir="<?= $languages[$lang]['dir'] ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -308,6 +308,8 @@ if (isset($_POST['username'])) {
     <script type="text/javascript" src="scripts/registration.js?<?= $version ?>"></script>
     <script type="text/javascript" src="scripts/auth-theme.js?<?= $version ?>"></script>
     <script type="text/javascript" src="scripts/password-toggle.js?<?= $version ?>"></script>
+  <link rel="stylesheet" href="styles/personal.css?<?= $version ?>">
+  <script defer src="scripts/personal.js?<?= $version ?>"></script>
 </head>
 
 <body class="<?= $languages[$lang]['dir'] ?>">

@@ -49,6 +49,8 @@
             }
         });
     </script>
+  <link rel="stylesheet" href="styles/personal.css?<?= $version ?>">
+  <script defer src="scripts/personal.js?<?= $version ?>"></script>
 </head>
 
 <body>

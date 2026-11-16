@@ -1,3 +1,4 @@
+<footer class="personal-footer">个人订阅账本 · 基于 <a href="https://github.com/ellite/Wallos" target="_blank" rel="noopener">Wallos</a> 开源项目 · GPL-3.0</footer>
 </main>
 
 <div class="toast" id="errorToast">

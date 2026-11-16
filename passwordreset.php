@@ -205,7 +205,7 @@ if (isset($_POST['password']) && $_POST['password'] != "" && isset($_POST['confi
 
 ?>
 <!DOCTYPE html>
-<html dir="<?= $languages[$lang]['dir'] ?>">
+<html lang="zh-CN" dir="<?= $languages[$lang]['dir'] ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -229,6 +229,8 @@ if (isset($_POST['password']) && $_POST['password'] != "" && isset($_POST['confi
     <link rel="stylesheet" href="styles/login-dark-theme.css?<?= $version ?>" id="dark-theme" <?= $theme == "light" ? "disabled" : "" ?>>
     <script type="text/javascript" src="scripts/auth-theme.js?<?= $version ?>"></script>
     <script type="text/javascript" src="scripts/password-toggle.js?<?= $version ?>"></script>
+  <link rel="stylesheet" href="styles/personal.css?<?= $version ?>">
+  <script defer src="scripts/personal.js?<?= $version ?>"></script>
 </head>
 
 <body class="<?= $languages[$lang]['dir'] ?>">

@@ -53,7 +53,7 @@ if (isset($themeValue)) {
 
 $isAdmin = $_SESSION['userId'] == 1;
 
-$locale = isset($_COOKIE['user_locale']) ? $_COOKIE['user_locale'] : 'en_US';
+$locale = isset($_COOKIE['user_locale']) ? $_COOKIE['user_locale'] : 'zh_CN';
 $formatter = new IntlDateFormatter(
   $locale, 
   IntlDateFormatter::MEDIUM,
@@ -79,7 +79,7 @@ $mobileNavigation = $settings['mobile_nav'] ? "mobile-navigation" : "";
 
 ?>
 <!DOCTYPE html>
-<html dir="<?= $languages[$lang]['dir'] ?>">
+<html lang="zh-CN" dir="<?= $languages[$lang]['dir'] ?>">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
@@ -160,6 +160,8 @@ $mobileNavigation = $settings['mobile_nav'] ? "mobile-navigation" : "";
       }
     }
   </script>
+  <link rel="stylesheet" href="styles/personal.css?<?= $version ?>">
+  <script defer src="scripts/personal.js?<?= $version ?>"></script>
 </head>
 
 <body class="<?= $theme ?> <?= $languages[$lang]['dir'] ?> <?= $mobileNavigation ?>">
@@ -170,6 +172,7 @@ $mobileNavigation = $settings['mobile_nav'] ? "mobile-navigation" : "";
           <div class="logo-image" title="订阅管理 · Wallos">
             <?php include "images/siteicons/svg/logo.php"; ?>
           </div>
+          <span class="brand-title">订阅管理<small>Wallos · 个人订阅账本</small></span>
         </a>
       </div>
       <nav>

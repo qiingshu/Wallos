@@ -246,7 +246,7 @@ if (isset($_POST['one-time-code'])) {
 
 ?>
 <!DOCTYPE html>
-<html dir="<?= $languages[$lang]['dir'] ?>">
+<html lang="zh-CN" dir="<?= $languages[$lang]['dir'] ?>">
 
 <head>
     <meta charset="UTF-8">
@@ -274,6 +274,8 @@ if (isset($_POST['one-time-code'])) {
     </script>
     <script type="text/javascript" src="scripts/login.js?<?= $version ?>"></script>
     <script type="text/javascript" src="scripts/auth-theme.js?<?= $version ?>"></script>
+  <link rel="stylesheet" href="styles/personal.css?<?= $version ?>">
+  <script defer src="scripts/personal.js?<?= $version ?>"></script>
 </head>
 
 <body class="<?= $languages[$lang]['dir'] ?>">

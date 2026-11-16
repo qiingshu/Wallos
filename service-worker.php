@@ -19,7 +19,7 @@ if (!headers_sent()) {
 // file changes this worker, the browser installs it and drops the old cache,
 // instead of serving the previous copy until the version is bumped.
 const STATIC_CACHE = 'static-cache-<?= $version ?>-<?= $assetsStamp ?>';
-const PAGES_CACHE = 'pages-cache-v1';
+const PAGES_CACHE = 'pages-cache-<?= $version ?>';
 const LOGOS_CACHE = 'logos-cache-v2';
 
 // manifest.php is intentionally not precached here: it's per-user (theme
@@ -27,6 +27,8 @@ const LOGOS_CACHE = 'logos-cache-v2';
 // instead of being served stale from a cache-first bucket forever.
 const staticAssets = [
     'styles/styles.css',
+    'styles/personal.css',
+    'scripts/personal.js',
     'styles/theme.css',
     'styles/dark-theme.css',
     'styles/login.css',

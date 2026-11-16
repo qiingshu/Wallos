@@ -18,10 +18,10 @@ $theme = sanitize_theme_mode($_COOKIE['theme'] ?? null);
 if ($theme === 'automatic') {
     $theme = sanitize_resolved_theme($_COOKIE['inUseTheme'] ?? null);
 }
-$themeColor = $theme === 'light' ? '#FFFFFF' : '#12151C';
+$themeColor = $theme === 'light' ? '#f4f6f3' : '#12151C';
 
 $manifest = [
-    'short_name' => 'Wallos',
+    'short_name' => '订阅管理',
     'name' => '订阅管理 · Wallos',
     'icons' => [
         [
@@ -51,8 +51,8 @@ $manifest = [
     'id' => 'com.wallos.app',
     'shortcuts' => [
         [
-            'name' => 'Dashboard',
-            'short_name' => 'Dashboard',
+            'name' => '首页',
+            'short_name' => '首页',
             'description' => 'View your dashboard',
             'url' => 'index.php',
             'icons' => [
@@ -60,8 +60,8 @@ $manifest = [
             ],
         ],
         [
-            'name' => 'Subscriptions',
-            'short_name' => 'Subscriptions',
+            'name' => '订阅',
+            'short_name' => '订阅',
             'description' => 'View your subscriptions',
             'url' => 'subscriptions.php',
             'icons' => [
@@ -69,8 +69,8 @@ $manifest = [
             ],
         ],
         [
-            'name' => 'Calendar',
-            'short_name' => 'Calendar',
+            'name' => '日历',
+            'short_name' => '日历',
             'description' => 'View your calendar',
             'url' => 'calendar.php',
             'icons' => [
@@ -87,8 +87,8 @@ $manifest = [
             ],
         ],
         [
-            'name' => 'Settings',
-            'short_name' => 'Settings',
+            'name' => '设置',
+            'short_name' => '设置',
             'description' => 'Change your settings',
             'url' => 'settings.php',
             'icons' => [
