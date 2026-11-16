@@ -12,118 +12,7 @@ if (!file_exists('../../images/uploads/logos')) {
     mkdir('../../images/uploads/logos/avatars', 0777, true);
 }
 
-function update_exchange_rate($db, $userId)
-{
-    $query = "SELECT api_key, provider FROM fixer WHERE user_id = :userId";
-    $stmt = $db->prepare($query);
-    $stmt->bindParam(':userId', $userId, SQLITE3_INTEGER);
-    $result = $stmt->execute();
-
-    if ($result) {
-        $row = $result->fetchArray(SQLITE3_ASSOC);
-
-        if ($row) {
-            $apiKey = $row['api_key'];
-            $provider = $row['provider'];
-            if ((int)$provider === 4) { wallos_exchangerate_refresh($db, $userId, true); return; }
-
-            $codes = "";
-            $query = "SELECT id, name, symbol, code FROM currencies";
-            $result = $db->query($query);
-            while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-                $codes .= $row['code'] . ",";
-            }
-            $codes = rtrim($codes, ',');
-
-            $query = "SELECT u.main_currency, c.code FROM user u LEFT JOIN currencies c ON u.main_currency = c.id WHERE u.id = :userId";
-            $stmt = $db->prepare($query);
-            $stmt->bindParam(':userId', $userId, SQLITE3_INTEGER);
-            $result = $stmt->execute();
-            $row = $result->fetchArray(SQLITE3_ASSOC);
-            $mainCurrencyCode = $row['code'];
-            $mainCurrencyId = $row['main_currency'];
-
-            if ((int) $provider === 2) {
-                // frankfurter.dev publishes the ECB reference rates without an
-                // account, and prices in any currency it lists, so it is asked
-                // in the user's own main currency and the conversion below has
-                // nothing left to do. No key, no header, and https, because
-                // there is no account behind it to authenticate.
-                //
-                // The helper answers in the same {"rates": ...} shape the two
-                // providers below do, so everything after this branch is
-                // unchanged.
-                $apiData = frankfurter_latest_rates($mainCurrencyCode, $codes);
-            } elseif ((int) $provider === 3) {
-                // allratestoday.com serves the same ECB table, also without an
-                // account, rebased to the main currency on its side. Same
-                // {"rates": ...} shape back, so nothing after here changes.
-                $apiData = allratestoday_latest_rates($mainCurrencyCode, $codes);
-            } elseif ($provider === 1) {
-                $api_url = "https://api.apilayer.com/fixer/latest?base=EUR&symbols=" . $codes;
-                $context = stream_context_create([
-                    'http' => [
-                        'method' => 'GET',
-                        'header' => 'apikey: ' . $apiKey,
-                    ]
-                ]);
-                $response = file_get_contents($api_url, false, $context);
-                $apiData = json_decode($response, true);
-            } else {
-                $api_url = "http://data.fixer.io/api/latest?access_key=" . $apiKey . "&base=EUR&symbols=" . $codes;
-                $response = file_get_contents($api_url);
-                $apiData = json_decode($response, true);
-            }
-
-            if ((int) $provider === 2 || (int) $provider === 3) {
-                // The answer already is in the main currency, so there is
-                // nothing to divide through by. The loop below still writes the
-                // main currency's own row as 1.0, which is a rule of this
-                // application rather than a number read out of a response.
-                $mainCurrencyToEUR = 1.0;
-            } else {
-                $mainCurrencyToEUR = $apiData['rates'][$mainCurrencyCode];
-            }
-
-            if ($apiData !== null && isset($apiData['rates'])) {
-                foreach ($apiData['rates'] as $currencyCode => $rate) {
-                    if ($currencyCode === $mainCurrencyCode) {
-                        $exchangeRate = 1.0;
-                    } else {
-                        $exchangeRate = $rate / $mainCurrencyToEUR;
-                    }
-                    $updateQuery = "UPDATE currencies SET rate = :rate WHERE code = :code AND user_id = :userId";
-                    $updateStmt = $db->prepare($updateQuery);
-                    $updateStmt->bindParam(':rate', $exchangeRate, SQLITE3_TEXT);
-                    $updateStmt->bindParam(':code', $currencyCode, SQLITE3_TEXT);
-                    $updateStmt->bindParam(':userId', $userId, SQLITE3_INTEGER);
-                    $updateResult = $updateStmt->execute();
-                }
-                $currentDate = new DateTime();
-                $formattedDate = $currentDate->format('Y-m-d');
-
-                $query = "SELECT * FROM last_exchange_update WHERE user_id = :userId";
-                $stmt = $db->prepare($query);
-                $stmt->bindParam(':userId', $userId, SQLITE3_INTEGER);
-                $result = $stmt->execute();
-                $row = $result->fetchArray(SQLITE3_ASSOC);
-
-                if ($row) {
-                    $query = "UPDATE last_exchange_update SET date = :formattedDate WHERE user_id = :userId";
-                } else {
-                    $query = "INSERT INTO last_exchange_update (date, user_id) VALUES (:formattedDate, :userId)";
-                }
-
-                $stmt = $db->prepare($query);
-                $stmt->bindParam(':formattedDate', $formattedDate, SQLITE3_TEXT);
-                $stmt->bindParam(':userId', $userId, SQLITE3_INTEGER);
-                $resutl = $stmt->execute();
-
-                $db->close();
-            }
-        }
-    }
-}
+function update_exchange_rate($db,$userId) { wallos_exchangerate_refresh($db,$userId,true); }
 
 $demoMode = getenv('DEMO_MODE');
 
@@ -336,7 +225,10 @@ if (
         $stmt->bindParam(':password', $hashedPassword, SQLITE3_TEXT);
     }
 
+    $exchangeGuard=null;
+    if ($main_currency != $mainCurrencyId) {$exchangeGuard=wallos_exchange_lock($userId);if(!$exchangeGuard){http_response_code(409);echo json_encode(['success'=>false,'message'=>'汇率正在更新，请稍后再切换主币种。']);exit;}}
     $result = $stmt->execute();
+    if($exchangeGuard){flock($exchangeGuard,LOCK_UN);fclose($exchangeGuard);}
 
     if ($result) {
         $cookieExpire = time() + (30 * 24 * 60 * 60);

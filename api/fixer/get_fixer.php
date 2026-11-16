@@ -65,8 +65,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
         1 => "APILayer.com",
         2 => "Frankfurter",
         3 => "AllRatesToday",
-        4 => "ExchangeRate-API",
-        4 => "ExchangeRate-API",
         4 => "ExchangeRate-API"
     ];
 
@@ -75,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     $stmt->bindValue(':userId', $userId);
     $result = $stmt->execute();
     $fixer = $result->fetchArray(SQLITE3_ASSOC);
+    if($fixer) $fixer['api_key']=in_array((int)$fixer['provider'],[2,3],true)?'':wallos_credential_get($db,'exchange'.$fixer['provider'],$userId);
 
     $notes = [];
 
@@ -82,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
         unset($fixer['user_id']);
         $fixer['provider_name'] = $providers[$fixer['provider']];
         if ($fixer['api_key']) {
-            $fixer['api_key'] = "********";
+            $fixer['api_key'] = '已配置';
         }
     } else {
         $fixer = [];
