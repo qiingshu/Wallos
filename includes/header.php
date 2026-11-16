@@ -82,8 +82,8 @@ $mobileNavigation = $settings['mobile_nav'] ? "mobile-navigation" : "";
 <html dir="<?= $languages[$lang]['dir'] ?>">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Wallos - Subscription Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+  <title>订阅管理 · Wallos</title>
   <meta name="apple-mobile-web-app-title" content="Wallos">
   <meta name="theme-color" content="<?= $theme == "light" ? "#FFFFFF" : "#12151C" ?>" id="theme-color" />
   <meta name="referrer" content="no-referrer">
@@ -167,7 +167,7 @@ $mobileNavigation = $settings['mobile_nav'] ? "mobile-navigation" : "";
     <div class="contain">
       <div class="logo">
         <a href=".">
-          <div class="logo-image" title="Wallos - Subscription Tracker">
+          <div class="logo-image" title="订阅管理 · Wallos">
             <?php include "images/siteicons/svg/logo.php"; ?>
           </div>
         </a>

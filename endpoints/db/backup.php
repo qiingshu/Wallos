@@ -62,7 +62,7 @@ if ($zip->close() === false) {
     @unlink($zipname);
     die(json_encode([
         "success" => false,
-        "message" => "Failed to finalize the zip file"
+        "message" => wallos_zh("Failed to finalize the zip file")
     ]));
 }
 

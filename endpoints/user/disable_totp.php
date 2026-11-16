@@ -67,7 +67,7 @@ $row = $result->fetchArray(SQLITE3_ASSOC);
 if ($row['totp_enabled'] == 0) {
     die(json_encode([
         "success" => false,
-        "message" => "2FA is not enabled for this user",
+        "message" => wallos_zh("2FA is not enabled for this user"),
         "reload" => true
     ]));
 }

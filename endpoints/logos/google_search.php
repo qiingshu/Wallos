@@ -15,7 +15,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 if (!isset($_GET['search']) || trim($_GET['search']) === '') {
-    echo json_encode(['error' => 'Invalid request.']);
+    echo json_encode(['error' => wallos_zh('Invalid request.')]);
     exit;
 }
 
@@ -30,7 +30,7 @@ if ($db->querySingle("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND 
 }
 
 if ($apiKey === '') {
-    echo json_encode(['error' => 'Google search is not configured.']);
+    echo json_encode(['error' => wallos_zh('Google search is not configured.')]);
     exit;
 }
 
@@ -60,14 +60,14 @@ $status = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 unset($ch);
 
 if ($response === false) {
-    echo json_encode(['error' => 'Failed to reach SerpAPI.']);
+    echo json_encode(['error' => wallos_zh('Failed to reach SerpAPI.')]);
     exit;
 }
 
 $data = json_decode($response, true);
 
 if ($status !== 200 || isset($data['error'])) {
-    echo json_encode(['error' => $data['error'] ?? 'SerpAPI request failed.']);
+    echo json_encode(['error' => $data['error'] ?? wallos_zh('SerpAPI request failed.')]);
     exit;
 }
 

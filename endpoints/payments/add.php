@@ -32,7 +32,7 @@ function getLogoFromUrl($url, $uploadDir, $name, $i18n, $settings)
 
     for ($i = 0; $i <= $maxRedirects; $i++) {
         if (!filter_var($currentUrl, FILTER_VALIDATE_URL) || !preg_match('/^https?:\/\//i', $currentUrl)) {
-            return ["success" => false, "message" => "Invalid URL format."];
+            return ["success" => false, "message" => wallos_zh("Invalid URL format.")];
         }
 
         $host = parse_url($currentUrl, PHP_URL_HOST);
@@ -83,7 +83,7 @@ function getLogoFromUrl($url, $uploadDir, $name, $i18n, $settings)
         break; 
     }
 
-    return ["success" => false, "message" => "Failed to fetch image."];
+    return ["success" => false, "message" => wallos_zh("Failed to fetch image.")];
 }
 
 

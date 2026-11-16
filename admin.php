@@ -214,7 +214,7 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                 <label for="oidcEnabled"><?= translate('oidc_oauth_enabled', $i18n) ?></label>
             </div>
             <div class="form-group">
-                <input type="text" id="oidcName" placeholder="Provider Name" autocomplete="off"
+                <input type="text" id="oidcName" placeholder="提供商名称" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['name']) ?>" <?= oidc_input_attrs('name', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
@@ -222,19 +222,19 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                     value="<?= htmlspecialchars($oidcSettings['client_id']) ?>" <?= oidc_input_attrs('client_id', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="text" id="oidcClientSecret" placeholder="Client Secret" autocomplete="off"
+                <input type="text" id="oidcClientSecret" placeholder="客户端密钥" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['client_secret']) ?>" <?= oidc_input_attrs('client_secret', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="text" id="oidcAuthUrl" placeholder="Auth URL" autocomplete="off"
+                <input type="text" id="oidcAuthUrl" placeholder="认证地址" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['authorization_url']) ?>" <?= oidc_input_attrs('authorization_url', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="text" id="oidcTokenUrl" placeholder="Token URL" autocomplete="off"
+                <input type="text" id="oidcTokenUrl" placeholder="令牌地址" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['token_url']) ?>" <?= oidc_input_attrs('token_url', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="text" id="oidcUserInfoUrl" placeholder="User Info URL" autocomplete="off"
+                <input type="text" id="oidcUserInfoUrl" placeholder="用户信息地址" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['user_info_url']) ?>" <?= oidc_input_attrs('user_info_url', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
@@ -242,11 +242,11 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                     value="<?= htmlspecialchars($oidcSettings['redirect_url']) ?>" <?= oidc_input_attrs('redirect_url', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="text" id="oidcLogoutUrl" placeholder="Logout URL" autocomplete="off"
+                <input type="text" id="oidcLogoutUrl" placeholder="退出地址" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['logout_url']) ?>" <?= oidc_input_attrs('logout_url', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="text" id="oidcUserIdentifierField" placeholder="User Identifier Field" autocomplete="off"
+                <input type="text" id="oidcUserIdentifierField" placeholder="用户标识字段" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['user_identifier_field']) ?>" <?= oidc_input_attrs('user_identifier_field', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
@@ -254,7 +254,7 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                     value="<?= htmlspecialchars($oidcSettings['scopes']) ?>" <?= oidc_input_attrs('scopes', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="hidden" id="oidcAuthStyle" placeholder="Auth Style" autocomplete="off"
+                <input type="hidden" id="oidcAuthStyle" placeholder="认证方式" autocomplete="off"
                     value="<?= htmlspecialchars($oidcSettings['auth_style']) ?>" />
             </div>
             <div class="form-group-inline">

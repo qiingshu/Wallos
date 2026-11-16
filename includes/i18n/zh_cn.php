@@ -40,17 +40,17 @@ $i18n = [
 
     // 页眉
     "profile" => "个人资料",
-    "dashboard" => "仪表盘",
+    "dashboard" => "首页",
     "subscriptions" => "订阅",
     "stats" => "统计",
     "settings" => "设置",
     "admin" => "管理员",
     "about" => "关于",
-    "logout" => "登出",
+    "logout" => "退出登录",
 
     // Dashboard
     "hello" => "你好",
-    "upcoming_payments" => "即将到期的付款",
+    "upcoming_payments" => "近期续费",
     "upcoming_cancellations" => "即将取消",
     "upcoming_payments_to_show" => "要显示的即将到期付款",
     "no_upcoming_payments" => "您没有任何即将到期的付款",
@@ -410,7 +410,7 @@ $i18n = [
 
     // Notifications
     "error_saving_notifications" => "保存通知数据时出错。",
-    "wallos_notification" => "Wallos 通知",
+    "wallos_notification" => "订阅续费提醒",
     "test_notification" => "这是一条测试通知。如果您看到此消息，说明 Wallos 通知邮件配置正确。",
     "email_error" => "发送电子邮件时出错",
     "notification_failed" => "通知发送失败",
@@ -544,11 +544,11 @@ $i18n = [
     "monthly_requests_used" => "本月已用API请求数",
     "category_entertainment" => "娱乐",
     "category_music" => "音乐",
-    "category_utilities" => "公用事业",
+    "category_utilities" => "生活缴费",
     "category_food_and_beverages" => "餐饮",
     "category_health_and_wellbeing" => "健康与养生",
-    "category_productivity" => "生产力",
-    "category_banking" => "银行",
+    "category_productivity" => "效率工具",
+    "category_banking" => "金融服务",
     "category_transport" => "交通",
     "category_education" => "教育",
     "category_insurance" => "保险",

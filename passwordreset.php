@@ -209,10 +209,10 @@ if (isset($_POST['password']) && $_POST['password'] != "" && isset($_POST['confi
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
     <meta name="theme-color" content="<?= $theme == "light" ? "#FFFFFF" : "#12151C" ?>" />
     <meta name="apple-mobile-web-app-title" content="Wallos">
-    <title>Wallos - Subscription Tracker</title>
+    <title>订阅管理 · Wallos</title>
     <link rel="icon" type="image/png" href="images/icon/favicon.ico" sizes="16x16">
     <link rel="apple-touch-icon" href="images/icon/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="152x152" href="images/icon/apple-touch-icon-152.png">
@@ -249,7 +249,7 @@ if (isset($_POST['password']) && $_POST['password'] != "" && isset($_POST['confi
         </aside>
         <section class="container">
             <header>
-                <div class="logo-image" title="Wallos - Subscription Tracker">
+                <div class="logo-image" title="订阅管理 · Wallos">
                     <?php include "images/siteicons/svg/logo.php"; ?>
                 </div>
                 <p>
@@ -341,4 +341,4 @@ if (isset($_POST['password']) && $_POST['password'] != "" && isset($_POST['confi
     </script>
 </body>
 
-</html>
+</html>

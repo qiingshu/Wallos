@@ -16,7 +16,7 @@ $submittedToken = $_POST['setup_token'] ?? '';
 if ($storedToken === '' || !hash_equals($storedToken, $submittedToken)) {
     die(json_encode([
         "success" => false,
-        "message" => "Invalid setup token"
+        "message" => wallos_zh("Invalid setup token")
     ]));
 }
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         emptyRestoreFolder();
                         die(json_encode([
                             "success" => false,
-                            "message" => "Invalid backup file: unsafe file path detected."
+                            "message" => wallos_zh("Invalid backup file: unsafe file path detected.")
                         ]));
                     }
 
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         emptyRestoreFolder();
                         die(json_encode([
                             "success" => false,
-                            "message" => "Invalid backup file: disallowed file type detected."
+                            "message" => wallos_zh("Invalid backup file: disallowed file type detected.")
                         ]));
                     }
                 }
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 die(json_encode([
                     "success" => false,
-                    "message" => "Failed to extract the uploaded file"
+                    "message" => wallos_zh("Failed to extract the uploaded file")
                 ]));
             }
 
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     emptyRestoreFolder();
                     die(json_encode([
                         "success" => false,
-                        "message" => "Failed to remove existing database"
+                        "message" => wallos_zh("Failed to remove existing database")
                     ]));
                 }
 
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     emptyRestoreFolder();
                     die(json_encode([
                         "success" => false,
-                        "message" => "Failed to replace database"
+                        "message" => wallos_zh("Failed to replace database")
                     ]));
                 }
 
@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 die(json_encode([
                     "success" => false,
-                    "message" => "wallos.db does not exist in the backup file"
+                    "message" => wallos_zh("wallos.db does not exist in the backup file")
                 ]));
             }
 
@@ -165,19 +165,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             echo json_encode([
                 "success" => false,
-                "message" => "Failed to upload file"
+                "message" => wallos_zh("Failed to upload file")
             ]);
         }
     } else {
         echo json_encode([
             "success" => false,
-            "message" => "No file uploaded"
+            "message" => wallos_zh("No file uploaded")
         ]);
     }
 } else {
     echo json_encode([
         "success" => false,
-        "message" => "Invalid request method"
+        "message" => wallos_zh("Invalid request method")
     ]);
 }
 ?>

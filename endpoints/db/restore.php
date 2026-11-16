@@ -45,7 +45,7 @@ if (isset($_FILES['file'])) {
                     emptyRestoreFolder();
                     die(json_encode([
                         "success" => false,
-                        "message" => "Invalid backup file: unsafe file path detected."
+                        "message" => wallos_zh("Invalid backup file: unsafe file path detected.")
                     ]));
                 }
                 if (in_array(strtolower(pathinfo($entry, PATHINFO_EXTENSION)), $blockedExtensions, true)) {
@@ -53,7 +53,7 @@ if (isset($_FILES['file'])) {
                     emptyRestoreFolder();
                     die(json_encode([
                         "success" => false,
-                        "message" => "Invalid backup file: disallowed file type detected."
+                        "message" => wallos_zh("Invalid backup file: disallowed file type detected.")
                     ]));
                 }
             }
@@ -62,7 +62,7 @@ if (isset($_FILES['file'])) {
         } else {
             die(json_encode([
                 "success" => false,
-                "message" => "Failed to extract the uploaded file"
+                "message" => wallos_zh("Failed to extract the uploaded file")
             ]));
         }
 
@@ -122,7 +122,7 @@ if (isset($_FILES['file'])) {
 
             die(json_encode([
                 "success" => false,
-                "message" => "wallos.db does not exist in the backup file"
+                "message" => wallos_zh("wallos.db does not exist in the backup file")
             ]));
         }
 
@@ -130,12 +130,12 @@ if (isset($_FILES['file'])) {
     } else {
         echo json_encode([
             "success" => false,
-            "message" => "Failed to upload file"
+            "message" => wallos_zh("Failed to upload file")
         ]);
     }
 } else {
     echo json_encode([
         "success" => false,
-        "message" => "No file uploaded"
+        "message" => wallos_zh("No file uploaded")
     ]);
 }

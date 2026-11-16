@@ -55,7 +55,7 @@ if (
     if (!validate_smtp_host($smtpAddress, $smtpPort, $db)) {
         die(json_encode([
             "success" => false,
-            "message" => "Security Error: SMTP host must not target link-local or loopback addresses."
+            "message" => wallos_zh("Security Error: SMTP host must not target link-local or loopback addresses.")
         ]));
     }
 
@@ -95,7 +95,7 @@ if (
     $email = $user['email'];
     $name = $user['username'];
 
-    $mail->setFrom($fromEmail, 'Wallos App');
+    $mail->setFrom($fromEmail, '订阅提醒');
     $mail->addAddress($email, $name);
 
     $mail->Subject = translate('wallos_notification', $i18n);

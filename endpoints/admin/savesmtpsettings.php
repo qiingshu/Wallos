@@ -26,7 +26,7 @@ $smtpPortInt = (int) $smtpPort;
 if (!validate_smtp_host($smtpAddress, $smtpPortInt, $db)) {
     die(json_encode([
         "success" => false,
-        "message" => "Security Error: SMTP host must not target link-local or loopback addresses."
+        "message" => wallos_zh("Security Error: SMTP host must not target link-local or loopback addresses.")
     ]));
 }
 

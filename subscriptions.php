@@ -473,7 +473,7 @@ $subscriptionsView = (isset($_COOKIE['subscriptionsView']) && $_COOKIE['subscrip
         foreach ($currencies as $currency) {
           $selected = ($currency['id'] == $main_currency) ? 'selected' : '';
           ?>
-          <option value="<?= $currency['id'] ?>" <?= $selected ?>><?= $currency['name'] ?></option>
+          <option value="<?= $currency['id'] ?>" <?= $selected ?>><?= htmlspecialchars(wallos_currency_name($currency)) ?></option>
           <?php
         }
         ?>

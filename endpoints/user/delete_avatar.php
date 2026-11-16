@@ -18,7 +18,7 @@ if (isset($input['avatar'])) {
     if (!$ownership) {
         echo json_encode([
             "success" => false,
-            "message" => "Security Error: You do not have permission to delete this file."
+            "message" => wallos_zh("Security Error: You do not have permission to delete this file.")
         ]);
         exit;
     }
@@ -31,7 +31,7 @@ if (isset($input['avatar'])) {
     if ($filePath === false || strpos($filePath, $baseDir) !== 0) {
         echo json_encode([
             "success" => false,
-            "message" => "Invalid file path."
+            "message" => wallos_zh("Invalid file path.")
         ]);
         exit;
     }

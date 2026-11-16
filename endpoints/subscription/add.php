@@ -36,7 +36,7 @@ function getLogoFromUrl($url, $uploadDir, $name, $settings, $i18n)
 
     for ($i = 0; $i <= $maxRedirects; $i++) {
         if (!filter_var($currentUrl, FILTER_VALIDATE_URL) || !preg_match('/^https?:\/\//i', $currentUrl)) {
-            return ['success' => false, 'message' => 'Invalid URL format.'];
+            return ['success' => false, 'message' => wallos_zh('Invalid URL format.')];
         }
 
         $parts = parse_url($currentUrl);

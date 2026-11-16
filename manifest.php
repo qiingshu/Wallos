@@ -22,7 +22,7 @@ $themeColor = $theme === 'light' ? '#FFFFFF' : '#12151C';
 
 $manifest = [
     'short_name' => 'Wallos',
-    'name' => 'Wallos - Subscription Tracker',
+    'name' => '订阅管理 · Wallos',
     'icons' => [
         [
             'src' => 'images/icon/android-chrome-192x192.png',

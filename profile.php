@@ -32,7 +32,7 @@ while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                         <div class="user-avatar">
                             <img src="<?= htmlspecialchars($userData['avatar'], ENT_QUOTES, 'UTF-8') ?>" alt="avatar" class="avatar" id="avatarImg"
                                 onClick="toggleAvatarSelect()" />
-                            <span class="edit-avatar" onClick="toggleAvatarSelect()" title="Change Avatar">
+                            <span class="edit-avatar" onClick="toggleAvatarSelect()" title="更换头像">
                                 <i class="fa-solid fa-pencil"></i>
                             </span>
                         </div>
@@ -56,7 +56,7 @@ while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                                             class="avatar-option" data-src="<?= htmlspecialchars($path) ?>">
 
                                         <div class="remove-avatar" onclick="deleteAvatar(<?= json_encode($filename, JSON_HEX_APOS | JSON_HEX_QUOT) ?>)"
-                                            title="Delete avatar">
+                                            title="删除头像">
                                             <i class="fa-solid fa-xmark"></i>
                                         </div>
                                     </div>
@@ -97,12 +97,12 @@ while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                         <div class="form-group">
                             <label for="password"><?= translate('password', $i18n) ?>:</label>
                             <input type="password" id="password" name="password" autocomplete="new-password"
-                                <?= $demoMode ? 'disabled title="Not available on Demo Mode"' : '' ?>>
+                                <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
                         </div>
                         <div class="form-group">
                             <label for="confirm_password"><?= translate('confirm_password', $i18n) ?>:</label>
                             <input type="password" id="confirm_password" name="confirm_password" autocomplete="new-password"
-                                <?= $demoMode ? 'disabled title="Not available on Demo Mode"' : '' ?>>
+                                <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
                         </div>
                         <?php
                         $currencies = array();
@@ -127,7 +127,7 @@ while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                                         $userData['currency_symbol'] = $currency['symbol'];
                                     }
                                     ?>
-                                    <option value="<?= $currency['id'] ?>" <?= $selected ?>><?= htmlspecialchars($currency['name']) ?></option>
+                                    <option value="<?= $currency['id'] ?>" <?= $selected ?>><?= htmlspecialchars(wallos_currency_name($currency)) ?></option>
                                     <?php
                                 }
                                 ?>
@@ -289,9 +289,9 @@ while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
                 <h3><?= translate('export_subscriptions', $i18n) ?></h3>
                 <div class="form-group-inline wrap">
                     <input type="button" value="<?= translate('export_as_json', $i18n) ?>" onClick="exportAsJson()"
-                        class="secondary-button thin mobile-grow" id="export-json" <?= $demoMode ? 'disabled title="Not available on Demo Mode"' : '' ?>>
+                        class="secondary-button thin mobile-grow" id="export-json" <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
                     <input type="button" value="<?= translate('export_as_csv', $i18n) ?>" onClick="exportAsCsv()"
-                        class="secondary-button thin mobile-grow" id="export-csv" <?= $demoMode ? 'disabled title="Not available on Demo Mode"' : '' ?>>
+                        class="secondary-button thin mobile-grow" id="export-csv" <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
                 </div>
             </div>
         </div>

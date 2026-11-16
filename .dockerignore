@@ -29,3 +29,12 @@ GEMINI.md
 .codex/
 .antigravitycli
 plan.html
+
+# Personal deployment data
+secrets/
+*.env
+!*.env.example
+*.private.*
+db/*.db
+images/uploads/
+!db/wallos.empty.db

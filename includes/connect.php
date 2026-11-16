@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . "/zh_custom.php";
 
 $databaseFile = 'db/wallos.db';
 

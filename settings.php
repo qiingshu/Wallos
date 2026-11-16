@@ -1293,10 +1293,10 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     <div class="form-group-inline" data-currencyid="<?= $currency['id'] ?>">
                         <input type="text" class="short" name="symbol" autocomplete="off" value="<?= htmlspecialchars($currency['symbol']) ?>"
                             placeholder="$">
-                        <input type="text" name="currency" autocomplete="off" value="<?= htmlspecialchars($currency['name']) ?>"
-                            placeholder="Currency Name">
+                        <input type="text" name="currency" autocomplete="off" value="<?= htmlspecialchars(wallos_currency_name($currency)) ?>"
+                            placeholder="货币名称">
                         <input type="text" name="code" autocomplete="off" value="<?= htmlspecialchars($currency['code']) ?>"
-                            placeholder="Currency Code" <?= !$canDelete ? 'disabled' : '' ?>>
+                            placeholder="货币代码" <?= !$canDelete ? 'disabled' : '' ?>>
                         <button class="image-button medium" onClick="editCurrency(<?= $currency['id'] ?>)" name="save"
                             title="<?= translate('save_currency', $i18n) ?>">
                             <i class="fa-solid fa-check"></i>
@@ -1341,7 +1341,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     <?= translate('currency_info', $i18n) ?>
                     <span>
                         fixer.io
-                        <a href="https://fixer.io/symbols" target="_blank" title="Currency codes">
+                        <a href="https://fixer.io/symbols" target="_blank" title="货币代码">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
                     </span>
@@ -1377,7 +1377,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
         <div class="account-fixer">
             <div class="form-group">
                 <input type="text" name="fixer-key" id="fixerKey" autocomplete="off" value="<?= htmlspecialchars($apiKey) ?>"
-                    placeholder="<?= translate('api_key', $i18n) ?>" <?= $demoMode ? 'disabled title="Not available on Demo Mode"' : '' ?>>
+                    placeholder="<?= translate('api_key', $i18n) ?>" <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
             </div>
             <div class="form-group">
                 <label for="fixerProvider"><?= translate('provider', $i18n) ?>:</label>
@@ -1416,7 +1416,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     <?= translate("get_key_alternative", $i18n) ?>
                     <span>
                         https://apilayer.com
-                        <a href="https://apilayer.com/marketplace/fixer-api" title="Get free fixer api key"
+                        <a href="https://apilayer.com/marketplace/fixer-api" title="获取 Fixer API 密钥"
                             target="_blank">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
@@ -1462,7 +1462,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
             <div class="form-group">
                 <input type="text" name="google-search-key" id="googleSearchKey" autocomplete="off"
                     value="<?= htmlspecialchars($googleSearchApiKey) ?>" placeholder="<?= translate('api_key', $i18n) ?>"
-                    <?= $demoMode ? 'disabled title="Not available on Demo Mode"' : '' ?>>
+                    <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
             </div>
             <div class="buttons">
                 <input type="submit" value="<?= translate('save', $i18n) ?>" id="saveGoogleSearch"

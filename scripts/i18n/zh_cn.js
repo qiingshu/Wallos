@@ -1,4 +1,6 @@
 let i18n = {
+  results: "结果",
+  subscription: "订阅",
     // Dashboard
     'error_reloading_subscription': '重新加载订阅时出错：',
     'error_fetching_image_results': '获取图片结果时出错：',
