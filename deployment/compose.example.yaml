@@ -1,0 +1,16 @@
+services:
+  wallos:
+    image: wallos-personal:REPLACE_WITH_FULL_COMMIT_SHA
+    container_name: wallos
+    restart: unless-stopped
+    ports: ["127.0.0.1:18282:80"]
+    environment:
+      TZ: Asia/Shanghai
+      EXCHANGERATE_API_KEY_FILE: /run/secrets/wallos-exchange
+    volumes:
+      - /opt/wallos/db:/var/www/html/db
+      - /opt/wallos/logos:/var/www/html/images/uploads/logos
+      - /opt/wallos/secrets/exchange:/run/secrets/wallos-exchange:ro
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "2"}
