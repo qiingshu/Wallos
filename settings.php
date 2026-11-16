@@ -1258,7 +1258,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
     $row = $result->fetchArray(SQLITE3_ASSOC);
     $mainCurrencyId = $row['main_currency'];
 
-    $query = "SELECT date FROM last_exchange_update";
+    $query = "SELECT date FROM last_exchange_update WHERE user_id=" . (int)$userId;
     $exchange_rates_last_updated = $db->querySingle($query);
 
     ?>
@@ -1333,15 +1333,15 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     <i class="fa-solid fa-circle-info"></i>
                     <?= translate('exchange_update', $i18n) ?>
                     <span>
-                        <?= $exchange_rates_last_updated ?>
+                        <?= $exchange_rates_last_updated ? htmlspecialchars($exchange_rates_last_updated) : "尚未获取汇率" ?>
                     </span>
                 </p>
                 <p>
                     <i class="fa-solid fa-circle-info"></i>
                     <?= translate('currency_info', $i18n) ?>
                     <span>
-                        fixer.io
-                        <a href="https://fixer.io/symbols" target="_blank" title="货币代码">
+                        ISO 4217
+                        <a href="https://www.exchangerate-api.com/docs/supported-currencies" target="_blank" title="货币代码">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         </a>
                     </span>
@@ -1372,11 +1372,21 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
 
     <section class="account-section">
         <header>
-            <h2>Fixer API Key</h2>
+            <h2>汇率提供商</h2>
         </header>
         <div class="account-fixer">
+            <?php require_once 'includes/exchangerate_api.php'; $exchangeStatus = wallos_exchangerate_status($userId); ?>
+            <p class="settings-notes" id="exchangeProviderHelp">ExchangeRate-API 密钥仅保存在服务器，每天自动更新一次。汇率仅用于统计换算，不改变订阅原金额或币种。失败时保留上次成功汇率。</p>
+            <?php if ((int)$provider === 4): ?>
+            <p role="status" class="exchange-status <?= ($exchangeStatus['state'] ?? '') === 'error' ? 'exchange-error' : '' ?>"><?= htmlspecialchars($exchangeStatus['message'] ?? '尚未获取汇率') ?></p>
+            <?php endif; ?>
+            <?php require_once 'includes/exchangerate_api.php'; $exchangeStatus = wallos_exchangerate_status($userId); ?>
+            <p class="settings-notes" id="exchangeProviderHelp">ExchangeRate-API 密钥仅保存在服务器，每天自动更新一次。汇率仅用于统计换算，不改变订阅原金额或币种。失败时保留上次成功汇率。</p>
+            <?php if ((int)$provider === 4): ?>
+            <p role="status" class="exchange-status <?= ($exchangeStatus['state'] ?? '') === 'error' ? 'exchange-error' : '' ?>"><?= htmlspecialchars($exchangeStatus['message'] ?? '尚未获取汇率') ?></p>
+            <?php endif; ?>
             <div class="form-group">
-                <input type="text" name="fixer-key" id="fixerKey" autocomplete="off" value="<?= htmlspecialchars($apiKey) ?>"
+                <input type="password" name="fixer-key" id="fixerKey" autocomplete="off" value=""
                     placeholder="<?= translate('api_key', $i18n) ?>" <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
             </div>
             <div class="form-group">
@@ -1386,6 +1396,8 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     <option value="1" <?= $provider == 1 ? 'selected' : '' ?>>apilayer.com</option>
                     <option value="2" <?= $provider == 2 ? 'selected' : '' ?>>frankfurter.dev</option>
                     <option value="3" <?= $provider == 3 ? 'selected' : '' ?>>allratestoday.com</option>
+                    <option value="4" <?= $provider == 4 ? 'selected' : '' ?>>ExchangeRate-API</option>
+                    <option value="4" <?= $provider == 4 ? 'selected' : '' ?>>ExchangeRate-API</option>
                 </select>
             </div>
             <div class="buttons">

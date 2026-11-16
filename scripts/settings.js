@@ -1699,3 +1699,29 @@ function runAiRecommendations() {
     });
 
 }
+
+// The managed provider never accepts a key in a browser request.
+function updateManagedExchangeInput() {
+ const provider=document.getElementById('fixerProvider'), input=document.getElementById('fixerKey');
+ if(!provider || !input) return;
+ input.disabled=provider.value==='4'; input.value='';
+ input.placeholder=provider.value==='4'?'密钥由服务器安全管理':'填写新密钥以更换现有配置';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ const provider=document.getElementById('fixerProvider');
+ if(provider) provider.addEventListener('change',updateManagedExchangeInput);
+ updateManagedExchangeInput();
+});
+
+// The managed provider never accepts a key in a browser request.
+function updateManagedExchangeInput() {
+ const provider=document.getElementById('fixerProvider'), input=document.getElementById('fixerKey');
+ if(!provider || !input) return;
+ input.disabled=provider.value==='4'; input.value='';
+ input.placeholder=provider.value==='4'?'密钥由服务器安全管理':'填写新密钥以更换现有配置';
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ const provider=document.getElementById('fixerProvider');
+ if(provider) provider.addEventListener('change',updateManagedExchangeInput);
+ updateManagedExchangeInput();
+});

@@ -38,3 +38,5 @@ secrets/
 db/*.db
 images/uploads/
 !db/wallos.empty.db
+
+db/exchangerate-status-*.json

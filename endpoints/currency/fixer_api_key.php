@@ -4,6 +4,26 @@ require_once '../../includes/validate_endpoint.php';
 
 $newApiKey = isset($_POST["api_key"]) ? trim($_POST["api_key"]) : "";
 $provider = isset($_POST["provider"]) ? $_POST["provider"] : 0;
+if ($newApiKey === '' && (int)$provider < 2) {
+ $old=$db->prepare('SELECT api_key FROM fixer WHERE user_id=:id AND provider=:provider');
+ $old->bindValue(':id',$userId,SQLITE3_INTEGER);$old->bindValue(':provider',(int)$provider,SQLITE3_INTEGER);
+ $saved=$old->execute()->fetchArray(SQLITE3_ASSOC);$newApiKey=$saved['api_key'] ?? '';
+}
+if ($newApiKey === '' && (int)$provider < 2) {
+ $old=$db->prepare('SELECT api_key FROM fixer WHERE user_id=:id AND provider=:provider');
+ $old->bindValue(':id',$userId,SQLITE3_INTEGER);$old->bindValue(':provider',(int)$provider,SQLITE3_INTEGER);
+ $saved=$old->execute()->fetchArray(SQLITE3_ASSOC);$newApiKey=$saved['api_key'] ?? '';
+}
+
+if ((int)$provider === 4) {
+    require_once __DIR__ . '/../../includes/exchangerate_api.php';
+    if (wallos_exchangerate_key() === '') { echo json_encode(['success'=>false,'message'=>'尚未配置 ExchangeRate-API 服务端密钥。']); exit; }
+    $stmt=$db->prepare('UPDATE fixer SET provider=4 WHERE user_id=:id');$stmt->bindValue(':id',$userId,SQLITE3_INTEGER);$stmt->execute();
+    if ($db->querySingle('SELECT COUNT(*) FROM fixer WHERE user_id='.(int)$userId) === 0) {
+        $stmt=$db->prepare('INSERT INTO fixer(api_key,provider,user_id) VALUES("",4,:id)');$stmt->bindValue(':id',$userId,SQLITE3_INTEGER);$stmt->execute();
+    }
+    echo json_encode(['success'=>true,'message'=>'ExchangeRate-API 已启用，密钥由服务器管理。']); exit;
+}
 
 // frankfurter.dev and allratestoday.com serve the ECB reference rates without
 // an account, so there is no key to check and nothing to ask them: choosing one

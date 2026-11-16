@@ -5,23 +5,6 @@ require_once '../../includes/exchange_rate_freshness.php';
 require_once '../../includes/frankfurter.php';
 require_once '../../includes/allratestoday.php';
 
-$shouldUpdate = true;
-
-if (isset($_POST['force']) && $_POST['force'] === "true") {
-    $shouldUpdate = true;
-} else {
-    // This branch could not run. It built a DateTime out of the SQLite3Result
-    // rather than out of a value fetched from it, which on PHP 8 is a
-    // TypeError and a fatal, and it went unnoticed because the interface only
-    // ever posts force=true, so nothing has reached it.
-    $shouldUpdate = !wallos_rates_refreshed_today($db, $userId);
-
-    if (!$shouldUpdate) {
-        echo "Rates are current, no need to update.";
-        exit;
-    }
-}
-
 $query = "SELECT api_key, provider FROM fixer WHERE user_id = :userId";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':userId', $userId, SQLITE3_INTEGER);
@@ -33,6 +16,8 @@ if ($result) {
     if ($row) {
         $apiKey = $row['api_key'];
         $provider = $row['provider'];
+        if ((int)$provider === 4) { $refresh = wallos_exchangerate_refresh($db, $userId, ($_POST['force'] ?? '') === 'true'); echo htmlspecialchars($refresh['message']); exit; }
+        if (($_POST['force'] ?? '') !== 'true' && wallos_rates_refreshed_today($db, $userId)) { echo '今日汇率已更新，正在使用缓存。'; exit; }
 
         $codes = "";
         $query = "SELECT id, name, symbol, code FROM currencies WHERE user_id = :userId";

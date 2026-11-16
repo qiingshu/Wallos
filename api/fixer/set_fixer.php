@@ -65,7 +65,7 @@ $userId = $user['id'];
 $fixerApiKey = isset($_POST['fixer_api_key']) ? trim($_POST['fixer_api_key']) : '';
 $provider = $_POST['provider'] ?? '0';
 
-if (!in_array($provider, ['0', '1', '2', '3', 0, 1, 2, 3], true)) {
+if (!in_array($provider, ['0', '1', '2', '3', '4', 0, 1, 2, 3, 4], true)) {
     echo json_encode([
         'success' => false,
         'title' => 'Invalid provider',
@@ -74,6 +74,11 @@ if (!in_array($provider, ['0', '1', '2', '3', 0, 1, 2, 3], true)) {
     exit;
 }
 $provider = intval($provider);
+if ($provider === 4) {
+ require_once __DIR__ . '/../../includes/exchangerate_api.php';
+ if (wallos_exchangerate_key() === '') { echo json_encode(['success'=>false,'message'=>'尚未配置 ExchangeRate-API 服务端密钥。']); exit; }
+}
+
 
 // frankfurter.dev and allratestoday.com publish the ECB reference rates without
 // an account, so an empty key on these providers is not an unconfigured one:
@@ -86,7 +91,7 @@ $provider = intval($provider);
 //
 // The row is updated rather than deleted and reinserted, so that a key stored
 // for one of the other two providers is still there to switch back to.
-if ($provider === 2 || $provider === 3) {
+if ($provider === 2 || $provider === 3 || $provider === 4) {
     $updateSql = "UPDATE fixer SET provider = :provider WHERE user_id = :userId";
     $updateStmt = $db->prepare($updateSql);
     $updateStmt->bindValue(':provider', $provider, SQLITE3_INTEGER);

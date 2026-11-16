@@ -4,6 +4,8 @@ require_once __DIR__ . '/../../includes/connect_endpoint_crontabs.php';
 require_once __DIR__ . '/../../includes/exchange_rate_freshness.php';
 require_once __DIR__ . '/../../includes/frankfurter.php';
 require_once __DIR__ . '/../../includes/allratestoday.php';
+require_once __DIR__ . '/../../includes/exchangerate_api.php';
+
 
 require 'settimezone.php';
 
@@ -26,11 +28,6 @@ while ($userToUpdateExchange = $usersToUpdateExchange->fetchArray(SQLITE3_ASSOC)
     // container start, so without this a deploy costs one provider request per
     // account, and a free plan's monthly allowance goes on refreshing rates
     // that were already current.
-    if (wallos_rates_refreshed_today($db, $userId)) {
-        echo "Rates are already current today.<br />";
-        continue;
-    }
-
     $query = "SELECT api_key, provider FROM fixer WHERE user_id = :userId";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':userId', $userId, SQLITE3_INTEGER);
@@ -42,6 +39,8 @@ while ($userToUpdateExchange = $usersToUpdateExchange->fetchArray(SQLITE3_ASSOC)
         if ($row) {
             $apiKey = $row['api_key'];
             $provider = $row['provider'];
+            if ((int)$provider === 4) { $refresh = wallos_exchangerate_refresh($db, $userId); echo htmlspecialchars($refresh['message']) . "<br />"; continue; }
+            if (wallos_rates_refreshed_today($db, $userId)) continue;
 
             $codes = "";
             $query = "SELECT id, name, symbol, code FROM currencies WHERE user_id = :userId";
