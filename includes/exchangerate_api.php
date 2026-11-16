@@ -39,6 +39,18 @@ function wallos_exchangerate_refresh($db, $userId, $force = false, $fetch = null
     $status = wallos_exchangerate_status($userId);
     $q = $db->prepare('SELECT c.code FROM user u JOIN currencies c ON c.id=u.main_currency AND c.user_id=u.id WHERE u.id=:id');
     $q->bindValue(':id', $userId, SQLITE3_INTEGER); $main = $q->execute()->fetchArray(SQLITE3_ASSOC)['code'] ?? '';
+    // Rebase a previously valid table before using it with a newly selected main currency.
+    // The old successful timestamp stays intact; no subscription price is rewritten.
+    if (!empty($status['last_success']) && !empty($status['main_currency']) && $status['main_currency'] !== $main) {
+        $q=$db->prepare('SELECT rate FROM currencies WHERE code=:code AND user_id=:id');
+        $q->bindValue(':code',$main,SQLITE3_TEXT);$q->bindValue(':id',$userId,SQLITE3_INTEGER);
+        $base=$q->execute()->fetchArray(SQLITE3_ASSOC)['rate'] ?? 0;
+        if (is_numeric($base) && is_finite((float)$base) && $base > 0) {
+            $q=$db->prepare('UPDATE currencies SET rate=rate/:base WHERE user_id=:id');
+            $q->bindValue(':base',(float)$base,SQLITE3_FLOAT);$q->bindValue(':id',$userId,SQLITE3_INTEGER);
+            if($q->execute()) { $status['main_currency']=$main;wallos_exchangerate_save_status($userId,$status); }
+        }
+    }
     if (($status['main_currency'] ?? '') === $main && substr($status['last_success'] ?? '', 0, 10) === $today) {
         return ['success'=>true, 'message'=>'今日汇率已更新，正在使用缓存。', 'cached'=>true];
     }

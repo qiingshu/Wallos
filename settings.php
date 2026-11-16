@@ -1850,7 +1850,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         <?php
                         if ($settings['convert_currency'])
                             echo ' checked';
-                        if ($apiKey == "")
+                        if ($apiKey == "" && !in_array((int)$provider, [2, 3, 4], true))
                             echo ' disabled';
                         ?>>
                     <label for="convertcurrency"><?= translate('convert_prices', $i18n) ?></label>

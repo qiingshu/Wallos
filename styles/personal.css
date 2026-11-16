@@ -45,3 +45,11 @@ button,input[type=submit]{border-radius:10px;min-height:40px}
  .subscription-main{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important}
  .toast{max-width:calc(100vw - 24px);box-sizing:border-box}
 }
+/* Let long Chinese checkbox labels wrap inside narrow settings cards. */
+.form-group-inline>label{width:auto!important;max-width:100%;min-width:0;flex:1 1 0;flex-shrink:1!important;overflow-wrap:anywhere}
+.form-group-inline>input[type=checkbox],.form-group-inline>input[type=radio]{flex:0 0 auto}
+.toast:not(.active){display:none}
+.toast.active{display:block}
+@media(max-width:768px){.account-section .form-group-inline{max-width:100%}.account-section .form-group-inline>div{min-width:0}.account-section input[type=checkbox]+label{width:auto!important;min-width:0;flex:1 1 0}}
+
+.empty-page>img{max-width:200px;width:55%;height:auto}.empty-page{padding-top:18px}

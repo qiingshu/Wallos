@@ -4,6 +4,7 @@ require_once '../../includes/inputvalidation.php';
 require_once '../../includes/validate_endpoint.php';
 require_once '../../includes/frankfurter.php';
 require_once '../../includes/allratestoday.php';
+require_once '../../includes/exchangerate_api.php';
 require_once '../../includes/default_names.php';
 
 if (!file_exists('../../images/uploads/logos')) {
@@ -24,6 +25,7 @@ function update_exchange_rate($db, $userId)
         if ($row) {
             $apiKey = $row['api_key'];
             $provider = $row['provider'];
+            if ((int)$provider === 4) { wallos_exchangerate_refresh($db, $userId, true); return; }
 
             $codes = "";
             $query = "SELECT id, name, symbol, code FROM currencies";

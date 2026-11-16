@@ -4,7 +4,7 @@
 
 UI 样式参考实际 cx.imqing.cc：#f4f6f3 背景、#28674e 主色、系统中文字体、白色圆角卡片。styles/personal.css 最后加载，保留原生 PHP/JS 流程。includes/version.php 与 service-worker.php 的页面及静态缓存随定制版本更新。
 
-汇率提供商编号 4 为 ExchangeRate-API；原 0–3 继续保留。密钥仅从 EXCHANGERATE_API_KEY_FILE 读取，服务端只读挂载；设置页面不回填密钥。每天 02:00 官方 cron 更新，重启和当日多次请求复用缓存。统一请求 USD 基准后写入 rate[currency] = API[currency] / API[main]；现有换算使用 amount/rate。主币种变化会使当日缓存失效。异常响应、缺失币种和非正汇率均不写入。状态保存 db/exchangerate-status-USERID.json。订阅原金额和币种不变。已有非本提供商的密钥仍由原数据库安全保存。
+汇率提供商编号 4 为 ExchangeRate-API；原 0–3 继续保留。密钥仅从 EXCHANGERATE_API_KEY_FILE 读取，服务端只读挂载；设置页面不回填密钥。每天 02:00 官方 cron 更新，重启和当日多次请求复用缓存。统一请求 USD 基准后写入 rate[currency] = API[currency] / API[main]；现有换算使用 amount/rate。主币种变化先用已缓存汇率重新定基准，同日不额外请求。异常响应、缺失币种和非正汇率均不写入。状态保存 db/exchangerate-status-USERID.json。订阅原金额和币种不变。已有非本提供商的密钥仍由原数据库安全保存。
 
 默认货币名称仅对「代码 + 原版英文默认名」做显示翻译，自定义名称原样保留。默认分类按新账号的语言生成，既有分类不批量改名。中文词条与硬编码校验提示分别位于 includes/i18n/zh_cn.php、scripts/i18n/zh_cn.js、includes/zh_custom.php。邮件发件名为「订阅提醒」，正文使用收件人的 zh_cn 词条。
 

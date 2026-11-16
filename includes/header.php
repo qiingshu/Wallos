@@ -2,7 +2,7 @@
 require_once 'connect.php';
 require_once 'checkuser.php';
 require_once 'checksession.php';
-require_once 'checkredirect.php';
+// Keep the expense overview available before the first subscription.
 require_once 'currency_formatter.php';
 
 require_once 'libs/csrf.php';
