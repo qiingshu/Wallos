@@ -19,7 +19,7 @@ if (!headers_sent()) {
 // file changes this worker, the browser installs it and drops the old cache,
 // instead of serving the previous copy until the version is bumped.
 const STATIC_CACHE = 'static-cache-<?= $version ?>-<?= $assetsStamp ?>';
-const PAGES_CACHE = 'pages-cache-<?= $version ?>';
+const PAGES_CACHE = 'pages-cache-<?= $version ?>-no-settings';
 const LOGOS_CACHE = 'logos-cache-v2';
 
 // manifest.php is intentionally not precached here: it's per-user (theme
@@ -29,6 +29,7 @@ const staticAssets = [
     'styles/styles.css',
     'styles/personal.css',
     'scripts/personal.js',
+    'scripts/credentials.js',
     'styles/theme.css',
     'styles/dark-theme.css',
     'styles/login.css',
@@ -181,13 +182,13 @@ const staticAssets = [
 const pagesToPrefetch = [
     'index.php',
     'subscriptions.php',
-    'profile.php',
+
     'calendar.php',
-    'settings.php',
+
     'stats.php',
     'about.php',
     'login.php',
-    'admin.php',
+
 ];
 
 // Install: cache static assets in small batches. Firing all ~150 fetches at
@@ -227,25 +228,15 @@ self.addEventListener('activate', function (event) {
 });
 
 // Message: prefetch pages after login
-self.addEventListener('message', function (event) {
-    if (event.data && event.data.type === 'PREFETCH_PAGES') {
-        caches.open(PAGES_CACHE).then(cache => {
-            pagesToPrefetch.forEach(url => {
-                fetch(url).then(response => {
-                    // Only cache if user is actually logged in (no redirect)
-                    if (response.ok && !response.redirected) {
-                        cache.put(url, response);
-                    }
-                }).catch(() => {});
-            });
-        });
-    }
-});
+// Authenticated pages are never prefetched or cached.
 
 // Fetch: single handler for all requests
 self.addEventListener('fetch', function (event) {
     const request = event.request;
     const url = new URL(request.url);
+
+    // Configuration and credential responses are network-only, including offline.
+    if (/\/(?:settings|admin|profile|login|registration|passwordreset)\.php$/.test(url.pathname) || url.pathname.includes('/api/') || url.pathname.includes('/endpoints/')) { event.respondWith(fetch(request, {cache:'no-store'})); return; }
 
     // Never intercept non-GET requests (POST, etc.)
     if (request.method !== 'GET') return;
@@ -317,21 +308,7 @@ self.addEventListener('fetch', function (event) {
         return;
     }
 
-    // PHP pages and everything else: network-first, cache as fallback
-    // Also update the pages cache on every successful load
-    event.respondWith(
-        fetch(request).then(response => {
-            if (response.ok && !response.redirected) {
-                const responseClone = response.clone(); // clone before any async operation
-                caches.open(PAGES_CACHE).then(cache => {
-                    cache.put(request, responseClone);
-                });
-            }
-            return response;
-        }).catch(() => {
-            return caches.match(request, { ignoreSearch: true });
-        })
-    );
+    event.respondWith(fetch(request, {cache:'no-store'}));
 });
 
 // Web Push (RFC 8291/8292): the payload includes/webpush_helper.php sends is

@@ -269,10 +269,12 @@ PROMPT;
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 300);
 
+    $gate=$db->prepare('SELECT enabled,api_key FROM ai_settings WHERE user_id=:id');$gate->bindValue(':id',$tempUserId,SQLITE3_INTEGER);$current=$gate->execute()->fetchArray(SQLITE3_ASSOC);
+    if(!$current || !$current['enabled'] || ($type!=='ollama' && ($current['api_key']==='' || !hash_equals((string)$current['api_key'],(string)$apiKey)))) {curl_close($ch);continue;}
     $reply = curl_exec($ch);
 
     if (curl_errno($ch)) {
-        $failures[] = ['user_id' => $tempUserId, 'reason' => curl_error($ch)];
+        $failures[] = ['user_id' => $tempUserId, 'reason' => 'AI 服务请求失败'];
         unset($ch);
         continue;
     }

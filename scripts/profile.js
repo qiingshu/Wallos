@@ -286,8 +286,7 @@ function regenerateApiKey() {
     .then(data => {
       regenerateButton.disabled = false;
       if (data.success) {
-        const newApiKey = data.apiKey;
-        document.getElementById("apikey").value = newApiKey;
+        document.getElementById("apikey").value = "";
         showSuccessMessage(data.message);
       } else {
         showErrorMessage(data.message || translate("failed_regenerate_api_key"));

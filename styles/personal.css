@@ -63,3 +63,17 @@ button,input[type=submit]{border-radius:10px;min-height:40px}
  #auto-renew-group>.inline{justify-content:flex-start;gap:10px;height:44px}
  #auto-renew-group label[for=auto_renew]{white-space:nowrap;width:auto}
 }
+
+.credential-tools,.credential-actions,.logo-actions,.exchange-links{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0 14px;min-width:0}
+.credential-tools button,.credential-actions button,.logo-actions button{min-height:44px;padding:8px 12px;white-space:nowrap}
+.credential-status{font-size:13px;color:#687d72;flex:0 0 100%}.credential-delete{color:#98483c}
+[hidden]{display:none!important}
+#exchange-settings>select,#exchange-settings input{width:100%;box-sizing:border-box}
+#exchange-settings details{margin-top:12px;padding:10px 0;border-top:1px solid var(--box-border-color)}
+#exchangeRates{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px}#exchangeRates dd{margin:0;text-align:right}
+.exchange-links a{display:inline-block;padding:6px 0;margin-right:12px;white-space:nowrap}
+.account-section .settings-notes,.account-section details{overflow-wrap:anywhere;white-space:normal}
+.logo-search{z-index:60!important;max-height:calc(var(--viewport-height,100dvh) - 24px)!important}.logo-search-backdrop{z-index:59!important}
+.logo-search #logo-search-images{overflow-y:auto;overscroll-behavior:contain;max-height:calc(var(--viewport-height,100dvh) - 230px)}
+.logo-retry{margin-top:8px;min-height:44px}.logo-actions{flex:1 1 100%;margin-top:0}.logo-preview{max-width:44px}
+@media(max-width:768px){.account-section .form-group-inline{gap:8px}.account-section .settings-notes>p{margin:8px 0}.settings-notes span{display:inline!important;width:auto!important}.account-section .credential-tools{flex-basis:100%}.credential-tools button{flex:1 1 auto}.account-section .form-group-inline:not(:has(input[type=checkbox])){align-items:stretch}.logo-actions button{flex:1 1 120px}.logo-search{width:calc(100% - 24px)!important;left:50%;top:calc(var(--viewport-top,0px) + 12px)!important;transform:translateX(-50%)!important}}

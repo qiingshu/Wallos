@@ -176,6 +176,7 @@ function resizeAndUploadLogo($uploadedFile, $uploadDir, $name, $settings)
                 return "";
             }
 
+            if ($image === false) { if (file_exists($uploadFile)) unlink($uploadFile); return ""; }
             if ($fileExtension === 'png') {
                 imagesavealpha($image, true);
             }

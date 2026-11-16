@@ -162,6 +162,7 @@ $mobileNavigation = $settings['mobile_nav'] ? "mobile-navigation" : "";
   </script>
   <link rel="stylesheet" href="styles/personal.css?<?= $version ?>">
   <script defer src="scripts/personal.js?<?= $version ?>"></script>
+<script defer src="scripts/credentials.js?<?= $version ?>"></script>
 </head>
 
 <body class="<?= $theme ?> <?= $languages[$lang]['dir'] ?> <?= $mobileNavigation ?>">

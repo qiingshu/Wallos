@@ -601,7 +601,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     </h3>
                 </header>
                 <div class="account-notification-section-settings" data-type="email">
-                    <p class="settings-notes">发件名：订阅提醒。SMTP 密钥由服务器安全管理；仅向设置的本人邮箱发送提醒。</p>
+                    <p class="settings-notes">发件名：订阅提醒。SMTP 密钥保存在服务器，可在此更换或删除；留空保留原值。</p>
                     <div class="form-group-inline">
                         <input type="checkbox" id="emailenabled" name="emailenabled" <?= $notificationsEmail['enabled'] ? "checked" : "" ?>>
                         <label for="emailenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
@@ -639,9 +639,9 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                             value="<?= htmlspecialchars($notificationsEmail['smtp_username']) ?>" />
                     </div>
                     <div class="form-group-inline">
-                        <input type="password" name="smtppassword" id="smtppassword" autocomplete="off"
+                        <input type="password" name="smtppassword" id="smtppassword" autocomplete="new-password"
                             placeholder="<?= translate('smtp_password', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsEmail['smtp_password']) ?>" />
+                            value="" />
                     </div>
                     <div class="form-group-inline">
                         <input type="text" name="fromemail" id="fromemail" autocomplete="off"
@@ -683,9 +683,9 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         <label for="discordenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="discordurl" id="discordurl" autocomplete="off"
+                        <input type="password" name="discordurl" id="discordurl" autocomplete="new-password"
                             placeholder="<?= translate('webhook_url', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsDiscord['webhook_url']) ?>" />
+                            value="" />
                     </div>
                     <div class="form-group-inline">
                         <input type="text" name="discordbotusername" id="discordbotusername" autocomplete="off"
@@ -732,9 +732,9 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         </div>
                     <?php endif; ?>
                     <div class="form-group-inline">
-                        <input type="text" name="gotifytoken" id="gotifytoken" autocomplete="off"
+                        <input type="password" name="gotifytoken" id="gotifytoken" autocomplete="new-password"
                             placeholder="<?= translate('token', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsGotify['token']) ?>" />
+                            value="" />
                     </div>
                     <div class="form-group-inline">
                         <input type="checkbox" id="gotifyignoressl" name="gotifyignoressl"
@@ -764,14 +764,14 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         <label for="pushoverenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="pushoveruserkey" id="pushoveruserkey" autocomplete="off"
+                        <input type="password" name="pushoveruserkey" id="pushoveruserkey" autocomplete="new-password"
                             placeholder="<?= translate('pushover_user_key', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsPushover['user_key']) ?>" />
+                            value="" />
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="pushovertoken" id="pushovertoken" autocomplete="off"
+                        <input type="password" name="pushovertoken" id="pushovertoken" autocomplete="new-password"
                             placeholder="<?= translate('token', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsPushover['token']) ?>" />
+                            value="" />
                     </div>
                     <?php if ($instancePushoverToken !== '' && trim((string) $notificationsPushover['token']) === ''): ?>
                         <div class="settings-notes">
@@ -805,9 +805,9 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         <label for="telegramenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="telegrambottoken" id="telegrambottoken" autocomplete="off"
+                        <input type="password" name="telegrambottoken" id="telegrambottoken" autocomplete="new-password"
                             placeholder="<?= translate('telegram_bot_token', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsTelegram['bot_token'] ? $notificationsTelegram['bot_token'] : "") ?>" />
+                            value="" />
                     </div>
                     <?php if ($instanceTelegramBot !== '' && trim((string) $notificationsTelegram['bot_token']) === ''): ?>
                         <div class="settings-notes">
@@ -846,9 +846,9 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         <label for="pushplusenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="pushplustoken" id="pushplustoken" autocomplete="off"
+                        <input type="password" name="pushplustoken" id="pushplustoken" autocomplete="new-password"
                             placeholder="<?= translate('pushplus_token', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsPushPlus['token'] ? $notificationsPushPlus['token'] : '') ?>" />
+                            value="" />
                     </div>
                     <div class="buttons">
                         <input type="button" class="secondary-button thin mobile-grow"
@@ -874,9 +874,9 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         <label for="mattermostenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="mattermostwebhookurl" id="mattermostwebhookurl"
+                        <input type="password" name="mattermostwebhookurl" id="mattermostwebhookurl"
                             placeholder="<?= translate('mattermost_webhook_url', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsMattermost['webhook_url'] ? $notificationsMattermost['webhook_url'] : '') ?>" />
+                            value="" />
                     </div>
                     <div class="form-group-inline">
                         <input type="text" name="mattermostbotusername" id="mattermostbotusername"
@@ -926,8 +926,8 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                             placeholder="<?= translate('topic', $i18n) ?>" value="<?= htmlspecialchars($notificationsNtfy['topic']) ?>" />
                     </div>
                     <div class="form-group-inline">
-                        <textarea class="thin" name="ntfyheaders" id="ntfyheaders"
-                            placeholder="<?= translate('custom_headers', $i18n) ?>"><?= htmlspecialchars($notificationsNtfy['headers']) ?></textarea>
+                        <input type="password"  class="thin" name="ntfyheaders" id="ntfyheaders"
+                            placeholder="<?= translate('custom_headers', $i18n) ?>" value="" autocomplete="new-password" />
                     </div>
                     <div class="form-grpup-inline">
                         <input type="checkbox" id="ntfyignoressl" name="ntfyignoressl"
@@ -1003,9 +1003,9 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         <label for="serverchanenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="serverchansendkey" id="serverchansendkey" autocomplete="off"
+                        <input type="password" name="serverchansendkey" id="serverchansendkey" autocomplete="new-password"
                             placeholder="<?= translate('serverchan_sendkey', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsServerchan['sendkey'] ? $notificationsServerchan['sendkey'] : '') ?>" />
+                            value="" />
                     </div>
                     <div class="buttons">
                         <input type="button" class="secondary-button thin mobile-grow"
@@ -1042,13 +1042,13 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                         </div>
                     </div>
                     <div class="form-group-inline">
-                        <input type="text" name="webhookurl" id="webhookurl" autocomplete="off"
+                        <input type="password" name="webhookurl" id="webhookurl" autocomplete="new-password"
                             placeholder="<?= translate('webhook_url', $i18n) ?>"
-                            value="<?= htmlspecialchars($notificationsWebhook['url']) ?>" />
+                            value="" />
                     </div>
                     <div class="form-group-inline">
-                        <textarea class="thin" name="webhookcustomheaders" id="webhookcustomheaders"
-                            placeholder="<?= translate('custom_headers', $i18n) ?>"><?= htmlspecialchars($notificationsWebhook['headers']) ?></textarea>
+                        <input type="password"  class="thin" name="webhookcustomheaders" id="webhookcustomheaders"
+                            placeholder="<?= translate('custom_headers', $i18n) ?>" value="" autocomplete="new-password" />
                     </div>
                     <div class="form-group-inline">
                         <textarea name="webhookpayload" id="webhookpayload"
@@ -1329,28 +1329,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                 <input type="submit" value="<?= translate('add', $i18n) ?>" id="addCurrency"
                     onClick="addCurrencyButton()" class="thin mobile-grow" />
             </div>
-            <div class="settings-notes">
-                <p>
-                    <i class="fa-solid fa-circle-info"></i>
-                    <?= translate('exchange_update', $i18n) ?>
-                    <span>
-                        <?= $exchange_rates_last_updated ? htmlspecialchars($exchange_rates_last_updated) : "尚未获取汇率" ?>
-                    </span>
-                </p>
-                <p>
-                    <i class="fa-solid fa-circle-info"></i>
-                    <?= translate('currency_info', $i18n) ?>
-                    <span>
-                        ISO 4217
-                        <a href="https://www.exchangerate-api.com/docs/supported-currencies" target="_blank" title="货币代码">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </span>
-                </p>
-                <p>
-                    <?= translate('currency_performance', $i18n) ?>
-                </p>
-            </div>
+
         </div>
     </section>
 
@@ -1371,87 +1350,21 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
     }
     ?>
 
-    <section class="account-section">
-        <header>
-            <h2>汇率提供商</h2>
-        </header>
-        <div class="account-fixer">
-            <?php require_once 'includes/exchangerate_api.php'; $exchangeStatus = wallos_exchangerate_status($userId); ?>
-            <p class="settings-notes" id="exchangeProviderHelp">ExchangeRate-API 密钥仅保存在服务器，每天自动更新一次。汇率仅用于统计换算，不改变订阅原金额或币种。失败时保留上次成功汇率。</p>
-            <?php if ((int)$provider === 4): ?>
-            <p role="status" class="exchange-status <?= ($exchangeStatus['state'] ?? '') === 'error' ? 'exchange-error' : '' ?>"><?= htmlspecialchars($exchangeStatus['message'] ?? '尚未获取汇率') ?></p>
-            <?php endif; ?>
-            <?php require_once 'includes/exchangerate_api.php'; $exchangeStatus = wallos_exchangerate_status($userId); ?>
-            <p class="settings-notes" id="exchangeProviderHelp">ExchangeRate-API 密钥仅保存在服务器，每天自动更新一次。汇率仅用于统计换算，不改变订阅原金额或币种。失败时保留上次成功汇率。</p>
-            <?php if ((int)$provider === 4): ?>
-            <p role="status" class="exchange-status <?= ($exchangeStatus['state'] ?? '') === 'error' ? 'exchange-error' : '' ?>"><?= htmlspecialchars($exchangeStatus['message'] ?? '尚未获取汇率') ?></p>
-            <?php endif; ?>
-            <div class="form-group">
-                <input type="password" name="fixer-key" id="fixerKey" autocomplete="off" value=""
-                    placeholder="<?= translate('api_key', $i18n) ?>" <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
-            </div>
-            <div class="form-group">
-                <label for="fixerProvider"><?= translate('provider', $i18n) ?>:</label>
-                <select name="fixer-provider" id="fixerProvider">
-                    <option value="0" <?= $provider == 0 ? 'selected' : '' ?>>fixer.io</option>
-                    <option value="1" <?= $provider == 1 ? 'selected' : '' ?>>apilayer.com</option>
-                    <option value="2" <?= $provider == 2 ? 'selected' : '' ?>>frankfurter.dev</option>
-                    <option value="3" <?= $provider == 3 ? 'selected' : '' ?>>allratestoday.com</option>
-                    <option value="4" <?= $provider == 4 ? 'selected' : '' ?>>ExchangeRate-API</option>
-                    <option value="4" <?= $provider == 4 ? 'selected' : '' ?>>ExchangeRate-API</option>
-                </select>
-            </div>
-            <div class="buttons">
-                <input type="submit" value="<?= translate('save', $i18n) ?>" id="addFixerKey"
-                    onClick="addFixerKeyButton()" class="thin mobile-grow" />
-            </div>
-            <div class="api-usage" id="fixerUsage" style="display: none;">
-                <div class="api-usage-label">
-                    <span><?= translate('monthly_requests_used', $i18n) ?></span>
-                    <span id="fixerUsageCount"></span>
-                </div>
-                <div class="api-usage-track">
-                    <span class="api-usage-fill" id="fixerUsageFill"></span>
-                </div>
-            </div>
-            <div class="settings-notes">
-                <p><i class="fa-solid fa-circle-info"></i><?= translate('fixer_info', $i18n) ?></p>
-                <p><?= translate('get_key', $i18n) ?>:
-                    <span>
-                        https://fixer.io/
-                        <a href="https://fixer.io/#pricing_plan"
-                            title="<?= translate("get_free_fixer_api_key", $i18n) ?>" target="_blank">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </span>
-                </p>
-                <p>
-                    <?= translate("get_key_alternative", $i18n) ?>
-                    <span>
-                        https://apilayer.com
-                        <a href="https://apilayer.com/marketplace/fixer-api" title="获取 Fixer API 密钥"
-                            target="_blank">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </span>
-                </p>
-                <p>
-                    <?= translate("no_api_key_provider", $i18n) ?>
-                    <span>
-                        https://frankfurter.dev
-                        <a href="https://frankfurter.dev" title="Frankfurter" target="_blank">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </span>
-                    <span>
-                        https://allratestoday.com
-                        <a href="https://allratestoday.com" title="AllRatesToday" target="_blank">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
-                    </span>
-                </p>
-            </div>
-        </div>
+    <section class="account-section" id="exchange-settings">
+      <header><h2>汇率设置</h2></header>
+      <label for="fixerProvider">汇率提供商</label>
+      <select id="fixerProvider" name="fixer-provider">
+      <?php foreach ([0=>'Fixer',1=>'APILayer',2=>'Frankfurter',3=>'AllRatesToday',4=>'ExchangeRate-API'] as $id=>$label): ?>
+        <option value="<?= $id ?>" <?= (int)$provider===$id?'selected':'' ?>><?= $label ?></option>
+      <?php endforeach; ?>
+      </select>
+      <p id="exchangeDescription"></p><p id="exchangeConfigured" role="status"></p>
+      <div id="exchangeKeyFields"><input type="password" id="fixerKey" name="fixer-key" autocomplete="new-password" placeholder="留空保留该提供商的密钥" value=""></div>
+      <div class="credential-actions"><button type="button" onclick="addFixerKeyButton()" id="addFixerKey">保存配置</button><button type="button" id="refreshExchange">立即刷新</button></div>
+      <p class="exchange-links"><a id="exchangeApply" target="_blank" rel="noopener">申请密钥</a><a id="exchangeHelp" target="_blank" rel="noopener">使用帮助</a><a href="https://cx.imqing.cc" target="_blank" rel="noopener">查询币种与汇率</a></p>
+      <p id="exchangeUpdated">最近成功更新：尚未获取汇率</p><p id="exchangeMessage" role="status"></p>
+      <details><summary>当前汇率结果</summary><p id="exchangeResultSource"></p><dl id="exchangeRates"></dl></details>
+      <details><summary>汇率说明</summary><p>每日自动更新一次，普通访问复用缓存。立即刷新会主动重新请求。失败或删除密钥时保留最后成功汇率；原订阅金额和币种不变。查询站提供独立查询工具，不代表所有提供商的支持币种范围。</p></details>
     </section>
 
     <?php
@@ -1473,8 +1386,8 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
         </header>
         <div class="account-google-search">
             <div class="form-group">
-                <input type="text" name="google-search-key" id="googleSearchKey" autocomplete="off"
-                    value="<?= htmlspecialchars($googleSearchApiKey) ?>" placeholder="<?= translate('api_key', $i18n) ?>"
+                <input type="password" name="google-search-key" id="googleSearchKey" autocomplete="new-password"
+                    value="" placeholder="<?= translate('api_key', $i18n) ?>"
                     <?= $demoMode ? 'disabled title="演示模式下不可用"' : '' ?>>
             </div>
             <div class="buttons">
@@ -1515,7 +1428,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
         <div class="account-ai-settings">
             <div class="form-group-inline">
                 <input type="checkbox" id="ai_enabled" name="ai_enabled" <?= isset($aiSettings['enabled']) && $aiSettings['enabled'] ? "checked" : "" ?>>
-                <label for="ai_enabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>
+                <label for="ai_enabled" class="capitalize"><?= !empty($aiSettings['enabled']) ? '已开启' : '已关闭' ?></label>
             </div>
             <div class="form-group">
                 <label for="ai_type"><?= translate('provider', $i18n) ?>:</label>
@@ -1539,10 +1452,10 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     </button>
             </div>
             <div class="form-group-inline">
-                <input type="password" id="ai_api_key" name="ai_api_key" autocomplete="off"
+                <input type="password" id="ai_api_key" name="ai_api_key" autocomplete="new-password"
                     class="<?= (isset($aiSettings['type']) && $aiSettings['type'] == 'ollama') ? 'hidden' : '' ?>"
                     placeholder="<?= translate('api_key', $i18n) ?>"
-                    value="<?= isset($aiSettings['api_key']) ? htmlspecialchars($aiSettings['api_key']) : '' ?>" />
+                    value="" />
                 <button type="button" id="fetchModelsButton" class="button thin" onclick="fetch_ai_models()">
                     <?= translate('test', $i18n) ?>
                 </button>

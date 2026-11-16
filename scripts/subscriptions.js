@@ -629,12 +629,13 @@ function runLogoSearch(searchTerm) {
       logoNav.appendChild(navItem);
     }
 
-    fetchLogoSearchSource(source.url)
+    const retry=()=>{showSearchState(resultsContainer,'loading');run();};
+    const run=()=>{ fetchLogoSearchSource(source.url)
       .then(data => {
         if (data.results && data.results.length > 0) {
           displayImageResults(data.results, resultsContainer);
         } else if (data.error) {
-          console.error(source.label, data.error);
+
           showSearchState(resultsContainer, 'error');
         } else {
           showSearchState(resultsContainer, 'empty');
@@ -644,6 +645,9 @@ function runLogoSearch(searchTerm) {
         console.error(translate('error_fetching_image_results'), source.label, error);
         showSearchState(resultsContainer, 'error');
       });
+    };run();
+    const retryButton=document.createElement('button');retryButton.type='button';retryButton.className='secondary-button logo-retry';retryButton.textContent='重新搜索';retryButton.onclick=retry;section.append(retryButton);
+
   });
 }
 

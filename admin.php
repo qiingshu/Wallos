@@ -222,8 +222,8 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                     value="<?= htmlspecialchars($oidcSettings['client_id']) ?>" <?= oidc_input_attrs('client_id', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
-                <input type="text" id="oidcClientSecret" placeholder="客户端密钥" autocomplete="off"
-                    value="<?= htmlspecialchars($oidcSettings['client_secret']) ?>" <?= oidc_input_attrs('client_secret', $oidcManagedFields) ?> />
+                <input type="password" id="oidcClientSecret" placeholder="客户端密钥" autocomplete="new-password"
+                    value="" <?= oidc_input_attrs('client_secret', $oidcManagedFields) ?> />
             </div>
             <div class="form-group">
                 <input type="text" id="oidcAuthUrl" placeholder="认证地址" autocomplete="off"
@@ -341,12 +341,12 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                     <?php /* The value is never rendered when the deployment owns it: a mounted
                              secret that reaches the page source has left the place it was
                              mounted into. The field says it is set, and nothing more. */ ?>
-                    <input type="password" name="smtppassword" id="smtppassword" autocomplete="off"
+                    <input type="password" name="smtppassword" id="smtppassword" autocomplete="new-password"
                         placeholder="<?= translate('smtp_password', $i18n) ?>" value=""
                         <?= oidc_input_attrs('smtp_password', $instanceManagedFields) ?> />
                 <?php else: ?>
-                    <input type="password" name="smtppassword" id="smtppassword" autocomplete="off"
-                        placeholder="<?= translate('smtp_password', $i18n) ?>" value="<?= htmlspecialchars($settings['smtp_password']) ?>" />
+                    <input type="password" name="smtppassword" id="smtppassword" autocomplete="new-password"
+                        placeholder="<?= translate('smtp_password', $i18n) ?>" value="" />
                 <?php endif; ?>
             </div>
             <div class="form-group-inline">
@@ -403,13 +403,13 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                             <?php /* A token the deployment owns is never rendered as a value: a mounted
                                      secret that reaches the page source has left the place it was
                                      mounted into. The field says it is set, and nothing more. */ ?>
-                            <input type="password" name="telegrambottoken" id="telegrambottoken" autocomplete="off"
+                            <input type="password" name="telegrambottoken" id="telegrambottoken" autocomplete="new-password"
                                 placeholder="<?= translate('telegram_bot_token', $i18n) ?>" value=""
                                 <?= oidc_input_attrs('telegram_bot_token', $instanceManagedFields) ?> />
                         <?php else: ?>
-                            <input type="password" name="telegrambottoken" id="telegrambottoken" autocomplete="off"
+                            <input type="password" name="telegrambottoken" id="telegrambottoken" autocomplete="new-password"
                                 placeholder="<?= translate('telegram_bot_token', $i18n) ?>"
-                                value="<?= htmlspecialchars($settings['telegram_bot_token'] ?? '') ?>" />
+                                value="" />
                         <?php endif; ?>
                     </div>
                     <div class="buttons">
@@ -441,12 +441,11 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                     <div class="form-group-inline">
                         <?php if (isset($instanceManagedFields['ntfy_headers'])): ?>
                             <?php /* A credential the deployment owns is never rendered as a value. */ ?>
-                            <textarea class="thin" name="ntfyheaders" id="ntfyheaders"
-                                placeholder="<?= translate('custom_headers', $i18n) ?>"
-                                <?= oidc_input_attrs('ntfy_headers', $instanceManagedFields) ?>></textarea>
+                            <input type="password"  class="thin" name="ntfyheaders" id="ntfyheaders"
+                                placeholder="<?= translate('custom_headers', $i18n) ?>" value="" autocomplete="new-password" />
                         <?php else: ?>
-                            <textarea class="thin" name="ntfyheaders" id="ntfyheaders"
-                                placeholder="<?= translate('custom_headers', $i18n) ?>"><?= htmlspecialchars($settings['ntfy_headers'] ?? '') ?></textarea>
+                            <input type="password"  class="thin" name="ntfyheaders" id="ntfyheaders"
+                                placeholder="<?= translate('custom_headers', $i18n) ?>" value="" autocomplete="new-password" />
                         <?php endif; ?>
                     </div>
                     <div class="buttons">
@@ -470,9 +469,9 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                 </header>
                 <div class="account-notification-section-settings" data-type="instance-gotify">
                     <div class="form-group-inline">
-                        <input type="text" name="gotifyserver" id="gotifyserver" autocomplete="off"
+                        <input type="password" name="gotifyserver" id="gotifyserver" autocomplete="off"
                             placeholder="https://gotify.example.com"
-                            value="<?= htmlspecialchars($settings['gotify_server'] ?? '') ?>"
+                            value=""
                             <?= oidc_input_attrs('gotify_server', $instanceManagedFields) ?> />
                     </div>
                     <div class="buttons">
@@ -498,13 +497,13 @@ $loginDisabledAllowed = $userCount == 1 && $settings['registrations_open'] == 0;
                     <div class="form-group-inline">
                         <?php if (isset($instanceManagedFields['pushover_token'])): ?>
                             <?php /* A credential the deployment owns is never rendered as a value. */ ?>
-                            <input type="password" name="pushovertoken" id="pushovertoken" autocomplete="off"
+                            <input type="password" name="pushovertoken" id="pushovertoken" autocomplete="new-password"
                                 placeholder="<?= translate('pushover_application_token', $i18n) ?>" value=""
                                 <?= oidc_input_attrs('pushover_token', $instanceManagedFields) ?> />
                         <?php else: ?>
-                            <input type="password" name="pushovertoken" id="pushovertoken" autocomplete="off"
+                            <input type="password" name="pushovertoken" id="pushovertoken" autocomplete="new-password"
                                 placeholder="<?= translate('pushover_application_token', $i18n) ?>"
-                                value="<?= htmlspecialchars($settings['pushover_token'] ?? '') ?>" />
+                                value="" />
                         <?php endif; ?>
                     </div>
                     <div class="buttons">

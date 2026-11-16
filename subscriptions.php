@@ -435,10 +435,7 @@ $subscriptionsView = (isset($_COOKIE['subscriptionsView']) && $_COOKIE['subscrip
       <input type="file" id="logo" name="logo" accept="image/jpeg, image/png, image/gif, image/webp, image/svg+xml"
         onchange="handleFileSelect(event)" class="hidden-input">
       <input type="hidden" id="logo-url" name="logo-url">
-      <div id="logo-search-button" class="image-button medium disabled" title="<?= translate('search_logo', $i18n) ?>"
-        onClick="searchLogo()">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </div>
+      <div class="logo-actions"><button type="button" id="logo-search-button" class="secondary-button disabled" title="搜索图标" onclick="searchLogo()">搜索图标</button><button type="button" class="secondary-button" id="upload-logo-button" onclick="document.getElementById('logo').click()">上传图标</button></div>
       <input type="hidden" id="id" name="id">
       <div class="logo-search-backdrop" id="logo-search-backdrop" onClick="closeLogoSearch()"></div>
       <div id="logo-search-results" class="logo-search"<?= !empty($googleSearchEnabled) ? ' data-google-search="1"' : '' ?>>

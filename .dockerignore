@@ -40,3 +40,5 @@ images/uploads/
 !db/wallos.empty.db
 
 db/exchangerate-status-*.json
+
+db/*.lock
