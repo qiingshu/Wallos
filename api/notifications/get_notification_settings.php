@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     if ($email_notifications) {
         unset($email_notifications['user_id']);
         if (isset($email_notifications['smtp_password'])) {
-            $email_notifications['smtp_password'] = "********";
+            $email_notifications['smtp_password'] = empty($email_notifications['smtp_password']) ? '未配置' : '已配置';
         }
         $notification_settings['email_notifications'] = $email_notifications;
     }
@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     if ($gotify_notifications) {
         unset($gotify_notifications['user_id']);
         if (isset($gotify_notifications['token'])) {
-            $gotify_notifications['token'] = "********";
+            $gotify_notifications['token'] = empty($gotify_notifications['token']) ? '未配置' : '已配置';
         }
         $notification_settings['gotify_notifications'] = $gotify_notifications;
     }
@@ -165,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     if ($ntfy_notifications) {
         unset($ntfy_notifications['user_id']);
         if (isset($ntfy_notifications['headers'])) {
-            $ntfy_notifications['headers'] = "********";
+            $ntfy_notifications['headers'] = empty($ntfy_notifications['headers']) ? '未配置' : '已配置';
         }
         $notification_settings['ntfy_notifications'] = $ntfy_notifications;
     }
@@ -178,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     if ($pushover_notifications) {
         unset($pushover_notifications['user_id']);
         if (isset($pushover_notifications['token'])) {
-            $pushover_notifications['token'] = "********";
+            $pushover_notifications['token'] = empty($pushover_notifications['token']) ? '未配置' : '已配置';
         }
         $notification_settings['pushover_notifications'] = $pushover_notifications;
     }
@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     if ($telegram_notifications) {
         unset($telegram_notifications['user_id']);
         if (isset($telegram_notifications['bot_token'])) {
-            $telegram_notifications['bot_token'] = "********";
+            $telegram_notifications['bot_token'] = empty($telegram_notifications['bot_token']) ? '未配置' : '已配置';
         }
         $notification_settings['telegram_notifications'] = $telegram_notifications;
     }
@@ -204,7 +204,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     if ($webhook_notifications) {
         unset($webhook_notifications['user_id']);
         if (isset($webhook_notifications['headers'])) {
-            $webhook_notifications['headers'] = "********";
+            $webhook_notifications['headers'] = empty($webhook_notifications['headers']) ? '未配置' : '已配置';
         }
         $notification_settings['webhook_notifications'] = $webhook_notifications;
     }
@@ -218,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     if ($serverchan_notifications) {
         unset($serverchan_notifications['user_id']);
         if (isset($serverchan_notifications['sendkey'])) {
-            $serverchan_notifications['sendkey'] = "********";
+            $serverchan_notifications['sendkey'] = empty($serverchan_notifications['sendkey']) ? '未配置' : '已配置';
         }
         $notification_settings['serverchan_notifications'] = $serverchan_notifications;
     }

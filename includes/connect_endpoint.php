@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/zh_custom.php";
+require_once __DIR__ . "/credentials.php";
 
 $databaseFile = '../../db/wallos.db';
 $db = new SQLite3($databaseFile);
@@ -36,3 +37,4 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 }
 
 ?>
+<?php wallos_credential_response_guard($db); ?>

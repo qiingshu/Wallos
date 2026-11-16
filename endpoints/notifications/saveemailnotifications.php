@@ -6,6 +6,7 @@ require_once '../../includes/instance_config.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 $data = wallos_fill_managed_form_fields($data, ['smtpaddress'=>'smtp_address','smtpport'=>'smtp_port','encryption'=>'encryption','smtpusername'=>'smtp_username','smtppassword'=>'smtp_password','fromemail'=>'from_email'], wallos_get_effective_admin_configuration($db)['managed_fields'], wallos_get_admin_settings($db));
 
 if (
@@ -26,7 +27,7 @@ if (
         $encryption = $data["encryption"];
     }
     $smtpUsername = $data["smtpusername"];
-    $smtpPassword = isset(wallos_get_effective_admin_configuration($db)["managed_fields"]["smtp_password"]) ? "" : $data["smtppassword"];
+    $smtpPassword = $data["smtppassword"];
     $fromEmail = $data["fromemail"];
     $otherEmails = $data["otheremails"];
 

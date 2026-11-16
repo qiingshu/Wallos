@@ -33,10 +33,13 @@ Example response:
 */
 
 require_once '../../includes/connect_endpoint.php';
+require_once '../../includes/validate_endpoint_admin.php';
 require_once '../../includes/ssrf_helper.php';
 require_once '../../includes/oidc_settings.php';
 
 header('Content-Type: application/json; charset=UTF-8');
+foreach (['smtp_password','telegram_bot_token','ntfy_headers','pushover_token','client_secret'] as $secretField) { if (isset($_POST[$secretField]) && trim((string)$_POST[$secretField]) === '') unset($_POST[$secretField]); }
+
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([

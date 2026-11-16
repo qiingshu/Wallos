@@ -21,6 +21,7 @@ $fakeSubscription = [
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 
 if (
     !isset($data["requestmethod"]) || $data["requestmethod"] == "" ||

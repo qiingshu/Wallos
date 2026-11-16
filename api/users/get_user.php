@@ -67,8 +67,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
     }
 
     // remove password and api_key from array
-    $user['password'] = "********";
-    $user['api_key'] = "********";
+    $user['password'] = empty($user['password']) ? '未配置' : '已配置';
+    $user['api_key'] = empty($user['api_key']) ? '未配置' : '已配置';
 
     $response = [
         "success" => true,

@@ -17,19 +17,7 @@ function ai_load_settings($db, $userId)
 
 function ai_log_failure($type, $userId, $reason, $context = [])
 {
-    $details = [
-        'provider=' . ($type ?: 'unknown'),
-        'user_id=' . (int) $userId,
-        'reason=' . $reason,
-    ];
-
-    foreach ($context as $key => $value) {
-        if ($value !== null && $value !== '') {
-            $details[] = $key . '=' . preg_replace('/[\r\n\s]+/', ' ', (string) $value);
-        }
-    }
-
-    error_log('[Wallos AI] ' . implode(' ', $details));
+    error_log('[Wallos AI] request failed; user_id='.(int)$userId);
 }
 
 function ai_get_provider_error($replyData)
@@ -195,6 +183,12 @@ function ai_decode_provider_response($reply)
 */
 function ai_complete($aiSettings, $prompt, $db, $i18n, $userId)
 {
+    $current = ai_load_settings($db, $userId);
+    if (!$current || empty($current['enabled']) || (($current['type']??'') !== 'ollama' && empty($current['api_key']))) {
+        return ['success'=>false,'message'=>'AI 已关闭或未配置密钥。'];
+    }
+    $aiSettings = $current;
+
     $type = $aiSettings['type'] ?? '';
     $enabled = !empty($aiSettings['enabled']);
     $model = $aiSettings['model'] ?? '';

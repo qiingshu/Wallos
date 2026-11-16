@@ -10,6 +10,11 @@ $openrouterModelsApiUrl = 'https://openrouter.ai/api/v1/models';
 
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
+require_once '../../includes/ai_client.php';
+$savedAI=ai_load_settings($db,$userId);
+if (!$savedAI || !$savedAI['enabled']) { http_response_code(409); echo json_encode(['success'=>false,'message'=>'AI 已关闭，未执行调用。']); exit; }
+if (empty($data['api_key'])) $data['api_key']=$savedAI['api_key']??'';
+
 
 $aiType = isset($data["type"]) ? trim($data["type"]) : '';
 $aiApiKey = isset($data["api_key"]) ? trim($data["api_key"]) : '';

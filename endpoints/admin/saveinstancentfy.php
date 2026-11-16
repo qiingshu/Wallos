@@ -12,6 +12,7 @@ require_once '../../includes/instance_config.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 
 $configuration = wallos_get_effective_admin_configuration($db);
 

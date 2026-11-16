@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/credentials.php';
 
 function wallos_get_oidc_defaults()
 {
@@ -125,6 +126,11 @@ function wallos_fetch_oidc_discovery_document($issuer)
 function wallos_get_effective_oidc_configuration($db)
 {
     $settings = wallos_get_db_oidc_settings($db);
+    if (wallos_credentials_migrated($db)) {
+        $required=['client_id','authorization_url','token_url','user_info_url','redirect_url','user_identifier_field'];
+        $missing=array_values(array_filter($required,fn($f)=>trim((string)($settings[$f]??''))===''));
+        return ['settings'=>$settings,'managed_fields'=>[],'notes'=>[],'enabled'=>wallos_get_db_oidc_enabled($db),'is_configured'=>count($missing)===0,'missing_fields'=>$missing,'discovery_document'=>null];
+    }
     $managedFields = [];
     $notes = [];
     $discoveryDocument = null;

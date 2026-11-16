@@ -5,6 +5,7 @@ require_once '../../includes/instance_config.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 
 // An empty bot token is allowed: it means the instance bot, if the deployment
 // configured one, the same as it does to the cron.

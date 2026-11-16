@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" || $_SERVER["REQUEST_METHOD"] === "GET
         unset($admin_settings['id']);
         // if the smtp_password is set, hide it
         if (isset($admin_settings['smtp_password'])) {
-            $admin_settings['smtp_password'] = "********";
+            $admin_settings['smtp_password'] = empty($admin_settings['smtp_password']) ? '未配置' : '已配置';
         }
     }
 

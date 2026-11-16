@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/zh_custom.php";
+require_once __DIR__ . "/credentials.php";
 
 $databaseFile = 'db/wallos.db';
 
@@ -11,3 +12,4 @@ if (!$db) {
 }
 
 ?>
+<?php wallos_credential_response_guard($db); ?>

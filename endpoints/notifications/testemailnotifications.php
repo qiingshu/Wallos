@@ -11,6 +11,7 @@ require_once '../../includes/instance_config.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 
 // smtppassword is rendered blank on purpose when the deployment owns it - a
 // mounted secret reaching the page source would have left the place it was

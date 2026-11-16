@@ -7,6 +7,7 @@ require_once '../../includes/ai_client.php';
 
 // Load AI settings
 $aiSettings = ai_load_settings($db, $userId);
+if (!$aiSettings || !$aiSettings['enabled'] || ($aiSettings['type'] !== 'ollama' && empty($aiSettings['api_key']))) { http_response_code(409); echo json_encode(['success'=>false,'message'=>'AI 已关闭或缺少密钥，未执行调用。']); exit; }
 
 if (!$aiSettings) {
     echo json_encode(["success" => false, "message" => translate('error', $i18n)]);

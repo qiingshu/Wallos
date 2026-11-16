@@ -4,6 +4,7 @@ require_once '../../includes/validate_endpoint.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 
 $enabled = $data["enabled"] ?? 0;
 $sendkey = $data["sendkey"] ?? "";

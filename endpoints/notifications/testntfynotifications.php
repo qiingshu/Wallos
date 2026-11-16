@@ -8,6 +8,7 @@ require_once '../../includes/instance_config.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 
 // The same resolution the cron does, so the button tests what will actually
 // be sent: an account with no server of its own is tested against the instance

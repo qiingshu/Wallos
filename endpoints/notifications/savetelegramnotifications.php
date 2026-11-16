@@ -5,6 +5,7 @@ require_once '../../includes/validate_endpoint.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_credential_merge($db, $userId, $data);
 
 if (
     !isset($data["bot_token"]) || $data["bot_token"] == "" ||

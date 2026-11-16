@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/zh_custom.php";
+require_once __DIR__ . "/credentials.php";
 
 $databaseFile = __DIR__ . '/../db/wallos.db';
 $db = new SQLite3($databaseFile);

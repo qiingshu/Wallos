@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/credentials.php';
 
 /*
   Instance settings the deployment can own.
@@ -166,6 +167,7 @@ function wallos_get_effective_admin_configuration($db)
         }
     }
 
+    if (wallos_credentials_migrated($db)) return ['settings'=>$settings,'managed_fields'=>[],'notes'=>[]];
     $managedFields = [];
     $notes = [];
     $secrets = wallos_instance_config_secrets();
@@ -291,6 +293,8 @@ function wallos_fill_managed_form_fields($posted, $fieldColumns, $managedFields,
  */
 function wallos_telegram_bot_token($db, $userToken)
 {
+    if(wallos_credential_deleted($db,'telegram',(int)($GLOBALS['userId']??0)))return '';
+
     $userToken = trim((string) $userToken);
 
     if ($userToken !== '') {
@@ -331,6 +335,8 @@ function wallos_telegram_bot_token($db, $userToken)
  */
 function wallos_ntfy_settings($db, $userHost, $userHeaders)
 {
+    if(wallos_credential_deleted($db,'ntfy',(int)($GLOBALS['userId']??0)))return ['host'=>'','headers'=>''];
+
     $userHost = trim((string) $userHost);
     $userHeaders = (string) $userHeaders;
 
@@ -402,6 +408,8 @@ function wallos_gotify_server($db, $userUrl)
  */
 function wallos_pushover_token($db, $userToken)
 {
+    if(wallos_credential_deleted($db,'pushover',(int)($GLOBALS['userId']??0)))return '';
+
     $userToken = trim((string) $userToken);
 
     if ($userToken !== '') {
