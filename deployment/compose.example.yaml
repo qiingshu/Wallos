@@ -6,11 +6,18 @@ services:
     ports: ["127.0.0.1:18282:80"]
     environment:
       TZ: Asia/Shanghai
+      WALLOS_SMTP_HOST: smtp.resend.com
+      WALLOS_SMTP_PORT: "465"
+      WALLOS_SMTP_ENCRYPTION: ssl
+      WALLOS_SMTP_USERNAME: resend
+      WALLOS_SMTP_PASSWORD_FILE: /run/secrets/wallos-resend
+      WALLOS_SMTP_FROM: admin@imqing.cc
       EXCHANGERATE_API_KEY_FILE: /run/secrets/wallos-exchange
     volumes:
       - /opt/wallos/db:/var/www/html/db
       - /opt/wallos/logos:/var/www/html/images/uploads/logos
       - /opt/wallos/secrets/exchange:/run/secrets/wallos-exchange:ro
+      - /opt/wallos/secrets/resend:/run/secrets/wallos-resend:ro
     logging:
       driver: json-file
       options: {max-size: "5m", max-file: "2"}

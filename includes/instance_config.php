@@ -412,3 +412,12 @@ function wallos_pushover_token($db, $userToken)
 
     return trim((string) ($settings['pushover_token'] ?? ''));
 }
+
+/** Deployment-owned SMTP applies equally to renewal and cancellation jobs. */
+function wallos_managed_email_settings($db, $row) {
+    $config = wallos_get_effective_admin_configuration($db);
+    foreach (['smtp_address','smtp_port','smtp_username','smtp_password','from_email','encryption'] as $name) {
+        if (isset($config['managed_fields'][$name])) $row[$name] = $config['settings'][$name];
+    }
+    return $row;
+}

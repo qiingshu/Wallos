@@ -1237,7 +1237,7 @@ function addFixerKeyButton() {
       'X-CSRF-Token': window.csrfToken,
     },
     body: new URLSearchParams({
-      api_key: apiKey,
+      api_key: provider === "4" ? "" : apiKey,
       provider: provider,
     }),
   })
@@ -1405,7 +1405,7 @@ function saveGoogleSearchButton() {
       'X-CSRF-Token': window.csrfToken,
     },
     body: new URLSearchParams({
-      api_key: apiKey,
+      api_key: provider === "4" ? "" : apiKey,
     }),
   })
     .then(response => response.json())

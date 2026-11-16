@@ -282,7 +282,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
         $notificationsEmail['smtp_port'] = $row['smtp_port'];
         $notificationsEmail['encryption'] = $row['encryption'];
         $notificationsEmail['smtp_username'] = $row['smtp_username'];
-        $notificationsEmail['smtp_password'] = $row['smtp_password'];
+        $notificationsEmail['smtp_password'] = isset(wallos_get_effective_admin_configuration($db)['managed_fields']['smtp_password']) ? '' : $row['smtp_password'];
         $notificationsEmail['from_email'] = $row['from_email'];
         $notificationsEmail['other_emails'] = $row['other_emails'];
         $rowCount++;
@@ -601,6 +601,7 @@ $upcomingPaymentsLimit = normalize_upcoming_payments_limit($settings['upcoming_p
                     </h3>
                 </header>
                 <div class="account-notification-section-settings" data-type="email">
+                    <p class="settings-notes">发件名：订阅提醒。SMTP 密钥由服务器安全管理；仅向设置的本人邮箱发送提醒。</p>
                     <div class="form-group-inline">
                         <input type="checkbox" id="emailenabled" name="emailenabled" <?= $notificationsEmail['enabled'] ? "checked" : "" ?>>
                         <label for="emailenabled" class="capitalize"><?= translate('enabled', $i18n) ?></label>

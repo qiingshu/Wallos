@@ -2,9 +2,11 @@
 require_once '../../includes/connect_endpoint.php';
 require_once '../../includes/validate_endpoint.php';
 require_once '../../includes/ssrf_helper.php';
+require_once '../../includes/instance_config.php';
 
 $postData = file_get_contents("php://input");
 $data = json_decode($postData, true);
+$data = wallos_fill_managed_form_fields($data, ['smtpaddress'=>'smtp_address','smtpport'=>'smtp_port','encryption'=>'encryption','smtpusername'=>'smtp_username','smtppassword'=>'smtp_password','fromemail'=>'from_email'], wallos_get_effective_admin_configuration($db)['managed_fields'], wallos_get_admin_settings($db));
 
 if (
     !isset($data["smtpaddress"]) || $data["smtpaddress"] == "" ||
@@ -24,7 +26,7 @@ if (
         $encryption = $data["encryption"];
     }
     $smtpUsername = $data["smtpusername"];
-    $smtpPassword = $data["smtppassword"];
+    $smtpPassword = isset(wallos_get_effective_admin_configuration($db)["managed_fields"]["smtp_password"]) ? "" : $data["smtppassword"];
     $fromEmail = $data["fromemail"];
     $otherEmails = $data["otheremails"];
 
