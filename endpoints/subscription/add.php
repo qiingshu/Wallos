@@ -20,6 +20,24 @@ if (empty($_POST) && !empty($_SERVER['CONTENT_LENGTH'])) {
 }
 
 
+// PHP can accept the fields before an interrupted file while losing later fields.
+// Report the known transfer failure before evaluating foreign-key ownership.
+try {
+    if (isset($_FILES['logo']) && ($_FILES['logo']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+        wallosValidateSubscriptionLogoTransfer($_FILES['logo']);
+    }
+} catch (RuntimeException $error) {
+    http_response_code(422);
+    echo json_encode(['status' => 'Error', 'code' => 'logo_transfer_failed', 'message' => $error->getMessage()], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+$submittedCurrencyId = $_POST['currency_id'] ?? null;
+if (!is_string($submittedCurrencyId) || !ctype_digit($submittedCurrencyId) || (int) $submittedCurrencyId < 1) {
+    http_response_code(422);
+    echo json_encode(['status' => 'Error', 'code' => 'currency_field_missing', 'message' => '未收到有效的币种字段，表单可能不完整。请重新打开编辑窗口，确认币种后重试。'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 if (!file_exists('../../images/uploads/logos')) {
     mkdir('../../images/uploads/logos', 0777, true);
     mkdir('../../images/uploads/logos/avatars', 0777, true);

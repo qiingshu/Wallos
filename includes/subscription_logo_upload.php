@@ -1,6 +1,6 @@
 <?php
 // Validate actual image bytes, not the phone's filename or supplied MIME type.
-function wallosStoreSubscriptionLogo($file, $directory)
+function wallosValidateSubscriptionLogoTransfer($file)
 {
     $error = $file['error'] ?? UPLOAD_ERR_NO_FILE;
     if ($error !== UPLOAD_ERR_OK) {
@@ -12,6 +12,11 @@ function wallosStoreSubscriptionLogo($file, $directory)
         ];
         throw new RuntimeException($messages[$error] ?? '服务器无法接收图片，请稍后重试。');
     }
+}
+
+function wallosStoreSubscriptionLogo($file, $directory)
+{
+    wallosValidateSubscriptionLogoTransfer($file);
     $path = $file['tmp_name'];
     if (!is_uploaded_file($path)) throw new RuntimeException('上传文件无效，请重新选择图片。');
     if (filesize($path) > 10 * 1024 * 1024) throw new RuntimeException('图片超过 10 MB，请压缩后重试。');

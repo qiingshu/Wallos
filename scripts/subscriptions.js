@@ -1102,8 +1102,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       const formData = new FormData(subscriptionForm);
       const file = document.querySelector('#logo').files[0];
+      // Serialize scalar fields first; an incomplete file must not swallow currency_id.
+      formData.delete('logo');
       if (file) {
-        formData.set('logo', await prepareSubscriptionLogo(file));
+        formData.append('logo', await prepareSubscriptionLogo(file));
         formData.set('logo-url', '');
       }
       const data = await submitFormData(formData, endpoint);
