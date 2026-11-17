@@ -43,3 +43,16 @@ docker build -f deployment/Dockerfile --build-arg REVISION=FULL_SHA -t wallos-pe
 `php tests/custom/round2.php` 使用内存数据库和模拟汇率响应验证保存、失败回滚、删除、缓存、force、换主币种、配置并发和 AI 关闭。浏览器验证在生产数据库的隔离副本进行，使用临时密码及模拟凭据，不修改生产账号。Logo 搜索响应可模拟，但选择后的公开 PNG 由实际服务端下载保存，再验证重新打开与上传。
 
 只做本轮受影响功能验收。浏览器 iPhone 尺寸及缩小视口用于布局检查，不等同于真机 Safari 软键盘验证。SMTP 配置值保持一致时不重复发送邮件。未完成的外部实际鉴权、收件确认和真机检查应如实记录；不宣称 Mistral/DeepSeek 双审通过。
+
+
+### qiingshu.3：带图订阅保存修复
+
+保存时显示进度，图像转换、校验、上传和响应解析失败时保留输入并在弹窗内说明原因。上传图片限制 10 MiB；浏览器将大于 1600px 的可解码图片缩小，SVG 转为 PNG。服务端验证真实图片格式与解码结果，限制直接上传的图片为 800 万像素，统一写为随机文件名 PNG；图标失败不保存订阅。HEIC/HEIF 无法解码时需先转为 JPEG。原有图片不批量转换。
+
+针对性浏览器回归：在无外部任务的隔离副本设置临时账号，启动 SSH 本机隧道，然后使用已安装 Playwright 的环境执行：
+
+```sh
+WALLOS_TEST_URL=http://127.0.0.1:19284/ WALLOS_TEST_LOGIN_FILE=/protected/test-login.json node tests/custom/subscription_save.cjs
+```
+
+测试登录文件仅含隔离账号的 username/password，权限 600，不提交仓库。测试只接受本机地址，并清理其创建的隔离订阅。请勿将隧道指向生产容器。此次镜像回滚只需恢复本次保存的 Compose 与发布记录，无数据库迁移，不恢复旧数据库覆盖新数据。

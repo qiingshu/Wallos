@@ -717,6 +717,7 @@ $subscriptionsView = (isset($_COOKIE['subscriptionsView']) && $_COOKIE['subscrip
       </select>
     </div>
 
+    <p id="subscription-save-status" role="alert" aria-live="polite" hidden></p>
     <div class="buttons">
       <input type="button" value="<?= translate('delete', $i18n) ?>" class="warning-button left thin" id="deletesub"
         style="display: none">

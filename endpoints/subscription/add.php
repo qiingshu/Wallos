@@ -9,24 +9,20 @@ require_once '../../includes/logo_theme_variant.php';
 require_once '../../includes/logo_cleanup.php';
 require_once '../../includes/subscription_payers.php';
 require_once '../../includes/subscription_categories.php';
+require_once '../../includes/subscription_logo_upload.php';
+ini_set('display_errors', '0');
+header('Content-Type: application/json; charset=utf-8');
+// A truncated multipart body must not turn into a save with empty fields.
+if (empty($_POST) && !empty($_SERVER['CONTENT_LENGTH'])) {
+    http_response_code(413);
+    echo json_encode(['status' => 'Error', 'message' => '上传内容过大或不完整，请压缩图片后重试。']);
+    exit;
+}
+
 
 if (!file_exists('../../images/uploads/logos')) {
     mkdir('../../images/uploads/logos', 0777, true);
     mkdir('../../images/uploads/logos/avatars', 0777, true);
-}
-
-function sanitizeFilename($filename)
-{
-    $filename = preg_replace("/[^a-zA-Z0-9\s]/", "", $filename);
-    $filename = str_replace(" ", "-", $filename);
-    $filename = str_replace(".", "", $filename);
-    return $filename;
-}
-
-function validateFileExtension($fileExtension)
-{
-    $allowedExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp'];
-    return in_array($fileExtension, $allowedExtensions);
 }
 
 function getLogoFromUrl($url, $uploadDir, $name, $settings, $i18n)
@@ -73,8 +69,7 @@ function getLogoFromUrl($url, $uploadDir, $name, $settings, $i18n)
         }
 
         if ($imageData !== false && $httpCode === 200) {
-            $timestamp = time();
-            $fileName = $timestamp . '-' . sanitizeFilename($name) . '.png';
+            $fileName = 'logo-' . bin2hex(random_bytes(16)) . '.png';
             $uploadFile = $uploadDir . $fileName; // Note: Use the provided $uploadDir variable
 
             if (saveLogo($imageData, $uploadFile, $name, $settings)) {
@@ -145,96 +140,6 @@ function saveLogo($imageData, $uploadFile, $name, $settings)
     return false;
 }
 
-function resizeAndUploadLogo($uploadedFile, $uploadDir, $name, $settings)
-{
-    $targetWidth = 135;
-    $targetHeight = 42;
-
-    $timestamp = time();
-    $originalFileName = $uploadedFile['name'];
-    $fileExtension = pathinfo($originalFileName, PATHINFO_EXTENSION);
-    $fileExtension = validateFileExtension($fileExtension) ? $fileExtension : 'png';
-    $fileName = $timestamp . '-' . sanitizeFilename($name) . '.' . $fileExtension;
-    $uploadFile = $uploadDir . $fileName;
-
-    if (move_uploaded_file($uploadedFile['tmp_name'], $uploadFile)) {
-        $fileInfo = getimagesize($uploadFile);
-
-        if ($fileInfo !== false) {
-            $width = $fileInfo[0];
-            $height = $fileInfo[1];
-
-            if ($fileExtension === 'png') {
-                $image = imagecreatefrompng($uploadFile);
-            } elseif ($fileExtension === 'jpg' || $fileExtension === 'jpeg') {
-                $image = imagecreatefromjpeg($uploadFile);
-            } elseif ($fileExtension === 'gif') {
-                $image = imagecreatefromgif($uploadFile);
-            } elseif ($fileExtension === 'webp') {
-                $image = imagecreatefromwebp($uploadFile);
-            } else {
-                return "";
-            }
-
-            if ($image === false) { if (file_exists($uploadFile)) unlink($uploadFile); return ""; }
-            if ($fileExtension === 'png') {
-                imagesavealpha($image, true);
-            }
-
-            // Crop/trim transparent margins (ensure we update dimensions after cropping)
-            require_once __DIR__ . '/../../includes/gd_background_removal.php';
-            $image = gdCropTransparent($image, 2);
-            $width = imagesx($image);
-            $height = imagesy($image);
-
-            $newWidth = $width;
-            $newHeight = $height;
-
-            if ($width > $targetWidth) {
-                $newWidth = (int) $targetWidth;
-                $newHeight = (int) (($targetWidth / $width) * $height);
-            }
-
-            if ($newHeight > $targetHeight) {
-                $newWidth = (int) (($targetHeight / $newHeight) * $newWidth);
-                $newHeight = (int) $targetHeight;
-            }
-
-            $resizedImage = imagecreatetruecolor($newWidth, $newHeight);
-            imagesavealpha($resizedImage, true);
-            $transparency = imagecolorallocatealpha($resizedImage, 0, 0, 0, 127);
-            imagefill($resizedImage, 0, 0, $transparency);
-            imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-
-            if ($fileExtension === 'png') {
-                $saved = imagepng($resizedImage, $uploadFile);
-            } elseif ($fileExtension === 'jpg' || $fileExtension === 'jpeg') {
-                $saved = imagejpeg($resizedImage, $uploadFile);
-            } elseif ($fileExtension === 'gif') {
-                $saved = imagegif($resizedImage, $uploadFile);
-            } elseif ($fileExtension === 'webp') {
-                $saved = imagewebp($resizedImage, $uploadFile);
-            } else {
-                return "";
-            }
-
-            imagedestroy($image);
-            imagedestroy($resizedImage);
-
-            if (!$saved) {
-                if (file_exists($uploadFile)) {
-                    unlink($uploadFile);
-                }
-                return "";
-            }
-
-            return $fileName;
-        }
-    }
-
-    return "";
-}
-
 $isEdit = isset($_POST['id']) && $_POST['id'] != "";
 $name = validate($_POST["name"]);
 $price = $_POST['price'];
@@ -266,7 +171,6 @@ $notes = validate_markdown($_POST["notes"]);
 $url = validate($_POST['url']);
 $logoUrl = validate($_POST['logo-url']);
 $logo = "";
-$logoError = "";
 $notify = isset($_POST['notifications']) ? true : false;
 $notifyDaysBefore = $_POST['notify_days_before'];
 $inactive = isset($_POST['inactive']) ? true : false;
@@ -324,25 +228,19 @@ if ($paymentMethodId !== null && $paymentMethodId !== '') {
     }
 }
 
-if ($logoUrl !== "") {
-    $result = getLogoFromUrl($logoUrl, '../../images/uploads/logos/', $name, $settings, $i18n);
-    if ($result['success']) {
+try {
+    if (isset($_FILES['logo']) && ($_FILES['logo']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
+        $logo = wallosStoreSubscriptionLogo($_FILES['logo'], '../../images/uploads/logos/');
+    } elseif ($logoUrl !== '') {
+        $result = getLogoFromUrl($logoUrl, '../../images/uploads/logos/', $name, $settings, $i18n);
+        if (!$result['success']) throw new RuntimeException('下载或处理图标失败，请重新选择图标或上传本地图片。');
         $logo = $result['filename'];
-    } else {
-        $logoError = $result['message'];
     }
-} else {
-    if (!empty($_FILES['logo']['name'])) {
-        $fileType = mime_content_type($_FILES['logo']['tmp_name']);
-        if (strpos($fileType, 'image') === false) {
-            echo translate("fill_all_fields", $i18n);
-            exit();
-        }
-        $logo = resizeAndUploadLogo($_FILES['logo'], '../../images/uploads/logos/', $name, $settings);
-        if ($logo === "") {
-            $logoError = translate('error_saving_logo', $i18n);
-        }
-    }
+} catch (Throwable $error) {
+    http_response_code(422);
+    $message = $error instanceof RuntimeException ? $error->getMessage() : '服务器处理图片失败，请换用较小的 PNG 或 JPEG 后重试。';
+    echo json_encode(['status' => 'Error', 'message' => $message], JSON_UNESCAPED_UNICODE);
+    exit;
 }
 
 $logoTextColor = null;
@@ -469,9 +367,6 @@ if ($stmt->execute()) {
     $success['status'] = "Success";
     $text = $isEdit ? "updated" : "added";
     $success['message'] = translate('subscription_' . $text . '_successfuly', $i18n);
-    if ($logoError !== "") {
-        $success['logo_warning'] = $logoError;
-    }
 
     $savedSubscriptionId = $isEdit ? intval($id) : $db->lastInsertRowID();
     saveSubscriptionPayers($db, $savedSubscriptionId, $payerIds);
@@ -491,7 +386,10 @@ if ($stmt->execute()) {
     echo json_encode($success);
     exit();
 } else {
-    echo translate('error', $i18n) . ": " . $db->lastErrorMsg();
+    if ($logo !== '') deleteLogoFileIfUnused($db, $logo, '../../images/uploads/logos/');
+    if ($logoVariant) deleteLogoFileIfUnused($db, $logoVariant, '../../images/uploads/logos/');
+    http_response_code(500);
+    echo json_encode(['status' => 'Error', 'message' => '数据库保存失败，请稍后重试；已填内容仍保留。'], JSON_UNESCAPED_UNICODE);
 }
 $db->close();
 ?>

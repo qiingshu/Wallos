@@ -143,6 +143,7 @@ function initMultiSelects() {
 }
 
 function resetForm() {
+  setSubscriptionSaveStatus("");
   const id = document.querySelector("#id");
   id.value = "";
   const formTitle = document.querySelector("#form-title");
@@ -883,7 +884,7 @@ function updateFolderCards(folders) {
   });
 }
 
-function fetchSubscriptions(id, event, initiator) {
+function fetchSubscriptions(id, event, initiator, propagateError = false) {
   const subscriptionsContainer = document.querySelector("#subscriptions");
   let getSubscriptions = "endpoints/subscriptions/get.php";
 
@@ -912,12 +913,15 @@ function fetchSubscriptions(id, event, initiator) {
     getSubscriptions += getSubscriptions.includes("?") ? `&paidStatus=${activeFilters['paidStatus']}` : `?paidStatus=${activeFilters['paidStatus']}`;
   }
 
-  fetch(getSubscriptions)
+  const refreshController = propagateError ? new AbortController() : null;
+  const refreshTimer = refreshController ? setTimeout(() => refreshController.abort(), 10000) : null;
+  return fetch(getSubscriptions, refreshController ? { signal: refreshController.signal } : {})
     .then(response => response.json().catch(() => null).then(data => ({ response, data })))
     .then(({ response, data }) => {
       if (!data) {
         throw new Error(`Unexpected response (${response.status})`);
       }
+      if (!response.ok || !data.success) throw new Error('列表刷新失败');
       if (data.success) {
         subscriptionsContainer.innerHTML = renderSubscriptions(data);
         updateFolderCards(data.folders);
@@ -945,8 +949,10 @@ function fetchSubscriptions(id, event, initiator) {
       searchSubscriptions();
     })
     .catch(error => {
+      if (propagateError) throw error;
       console.error(translate('error_reloading_subscription'), error);
-    });
+    })
+    .finally(() => { if (refreshTimer) clearTimeout(refreshTimer); });
 }
 
 function setSubscriptionsView(view) {
@@ -985,69 +991,74 @@ function setSortOption(sortOption) {
   toggleSortOptions();
 }
 
-function convertSvgToPng(file, callback) {
-  const reader = new FileReader();
+// Keep feedback inside the sheet: mobile sheets sit above the global toast.
+function setSubscriptionSaveStatus(message, error = false) {
+  const status = document.querySelector('#subscription-save-status');
+  if (!status) return;
+  status.textContent = message;
+  status.hidden = !message;
+  status.classList.toggle('save-error', error);
+  if (message) status.scrollIntoView({ block: 'nearest' });
+}
 
-  reader.onload = function (e) {
-    const img = new Image();
-    img.src = e.target.result;
-    img.onload = function () {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const pngDataUrl = canvas.toDataURL('image/png');
-      const pngFile = dataURLtoFile(pngDataUrl, file.name.replace(".svg", ".png"));
-      callback(pngFile);
+function prepareSubscriptionLogo(file) {
+  if (file.size > 10 * 1024 * 1024) return Promise.reject(new Error('图片超过 10 MB，请压缩后重试。'));
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    const url = URL.createObjectURL(file);
+    const finish = (error, value) => {
+      clearTimeout(timer); URL.revokeObjectURL(url);
+      image.onload = image.onerror = null;
+      error ? reject(error) : resolve(value);
     };
-  };
-
-  reader.readAsDataURL(file);
+    const timer = setTimeout(() => finish(new Error('图片处理超时，请换用较小的 PNG 或 JPEG 图片后重试。')), 15000);
+    image.onerror = () => finish(new Error('无法读取图片，请使用有效的 PNG、JPEG、GIF、WebP 或 SVG；HEIC/HEIF 请先转为 JPEG。'));
+    image.onload = () => {
+      try {
+        const width = image.naturalWidth, height = image.naturalHeight;
+        if (!width || !height) throw new Error('图片尺寸无效，请更换图片。');
+        const svg = file.type === 'image/svg+xml' || /\.svg$/i.test(file.name);
+        if (!svg && width <= 1600 && height <= 1600) return finish(null, file);
+        const scale = Math.min(1, 1600 / width, 1600 / height);
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(width * scale));
+        canvas.height = Math.max(1, Math.round(height * scale));
+        canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(blob => {
+          if (!blob) return finish(new Error('图片转换失败，请换用 PNG 或 JPEG 后重试。'));
+          finish(null, new File([blob], 'subscription-logo.png', { type: 'image/png' }));
+        }, 'image/png');
+      } catch (_) { finish(new Error('图片处理失败，请换用较小的 PNG 或 JPEG 后重试。')); }
+    };
+    image.src = url;
+  });
 }
 
-function dataURLtoFile(dataurl, filename) {
-  let arr = dataurl.split(','),
-    mime = arr[0].match(/:(.*?);/)[1],
-    bstr = atob(arr[1]),
-    n = bstr.length,
-    u8arr = new Uint8Array(n);
-
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new File([u8arr], filename, { type: mime });
-}
-
-function submitFormData(formData, submitButton, endpoint) {
-  fetch(endpoint, {
-    method: "POST",
-    headers: {
-      "X-CSRF-Token": window.csrfToken,
-    },
-    body: formData,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "Success") {
-        showSuccessMessage(data.message);
-        if (data.logo_warning) {
-          showErrorMessage(data.logo_warning);
-        }
-        fetchSubscriptions(null, null, "add");
-        closeAddSubscription();
-      } else {
-        showErrorMessage(data.message || translate("unknown_error"));
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      showErrorMessage(translate("unknown_error"));
-    })
-    .finally(() => {
-      submitButton.disabled = false;
+async function submitFormData(formData, endpoint) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 45000);
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST', headers: { 'X-CSRF-Token': window.csrfToken },
+      body: formData, signal: controller.signal,
     });
+    let data;
+    try { data = await response.json(); }
+    catch (_) {
+      throw new Error(response.status === 413 ? '图片或请求过大，请压缩图片后重试。' :
+        `服务器返回异常（HTTP ${response.status}），未能确认保存结果，请先刷新列表确认再重试。`);
+    }
+    if (!response.ok || data.status !== 'Success') {
+      const reasons = {401: '登录已过期，请重新登录后重试。', 403: '登录或安全校验已失效，请刷新页面后重试。', 413: '图片过大，请压缩后重试。'};
+      throw new Error(reasons[response.status] || data.message || '保存失败，请稍后重试。');
+    }
+    return data;
+  } catch (error) {
+    if (error.name === 'AbortError' || error instanceof TypeError) {
+      throw new Error('网络中断或保存超时，未能确认保存结果。请先刷新列表确认，避免重复新增；已填内容仍保留。');
+    }
+    throw error;
+  } finally { clearTimeout(timer); }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1066,33 +1077,50 @@ document.addEventListener('DOMContentLoaded', function () {
   const submitButton = document.querySelector("#save-button");
   const endpoint = "endpoints/subscription/add.php";
 
-  subscriptionForm.addEventListener("submit", function (e) {
+  let saving = false;
+  subscriptionForm.addEventListener('invalid', event => {
+    const field = event.target;
+    const labels = {name: '订阅名称', price: '金额', next_payment: '下次续费日期', start_date: '开始日期', url: '网址', frequency: '周期'};
+    setSubscriptionSaveStatus(`请检查${labels[field.name] || '表单必填项'}：${field.validationMessage}`, true);
+  }, true);
+  subscriptionForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-
+    if (saving) return;
+    saving = true;
+    const originalLabel = submitButton.value;
     submitButton.disabled = true;
-
-    const cycleVal = document.querySelector("#cycle")?.value;
-    if (cycleVal === "5") {
-      const freq = document.querySelector("#frequency");
-      if (freq) freq.value = 1;
-      const cancellationDate = document.querySelector("#cancellation_date");
-      if (cancellationDate) cancellationDate.value = "";
-      const notifyDays = document.querySelector("#notify_days_before");
-      if (notifyDays) notifyDays.value = -1;
-    }
-
-    const formData = new FormData(subscriptionForm);
-
-    const fileInput = document.querySelector("#logo");
-    const file = fileInput.files[0];
-
-    if (file && file.type === "image/svg+xml") {
-      convertSvgToPng(file, function (pngFile) {
-        formData.set("logo", pngFile);
-        submitFormData(formData, submitButton, endpoint);
-      });
-    } else {
-      submitFormData(formData, submitButton, endpoint);
+    submitButton.value = '保存中…';
+    subscriptionForm.setAttribute('aria-busy', 'true');
+    const closeButtons = document.querySelectorAll('#subscription-form .close-form, #subs-form input[type=button]');
+    closeButtons.forEach(button => { button.setAttribute('aria-disabled', 'true'); button.style.pointerEvents = 'none'; });
+    setSubscriptionSaveStatus('正在处理图片并保存，请稍候…');
+    try {
+      if (document.querySelector('#cycle')?.value === '5') {
+        document.querySelector('#frequency').value = 1;
+        document.querySelector('#cancellation_date').value = '';
+        document.querySelector('#notify_days_before').value = -1;
+      }
+      const formData = new FormData(subscriptionForm);
+      const file = document.querySelector('#logo').files[0];
+      if (file) {
+        formData.set('logo', await prepareSubscriptionLogo(file));
+        formData.set('logo-url', '');
+      }
+      const data = await submitFormData(formData, endpoint);
+      // A confirmed save must never be presented as a failed POST on refresh failure.
+      let refreshed = true;
+      try { await fetchSubscriptions(null, null, 'add', true); } catch (_) { refreshed = false; }
+      closeAddSubscription();
+      showSuccessMessage(data.message || '订阅已保存。');
+      if (!refreshed) showErrorMessage('订阅已保存，但列表刷新失败，请刷新页面查看，勿重复新增。');
+    } catch (error) {
+      setSubscriptionSaveStatus(error.message || '保存失败，请重试。', true);
+    } finally {
+      saving = false;
+      submitButton.disabled = false;
+      submitButton.value = originalLabel;
+      subscriptionForm.removeAttribute('aria-busy');
+      closeButtons.forEach(button => { button.removeAttribute('aria-disabled'); button.style.pointerEvents = ''; });
     }
   });
 
